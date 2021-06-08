@@ -1,0 +1,28 @@
+﻿@page "/subscribedemo"
+
+<h1>Service subscription demo</h1>
+
+<p>Strona demonstruje implementację wzorca observer - subskrybujemy indeks dla którego wartość (int) może ulegać zmianie w czasie. Zmienianiem tej wartości steruje usługa która działa w tle (symyluje usługę która cyklicznie odpytuje zewnętrzne API).</p>
+
+<br />
+
+<p>Oprócz tego jest to przykład rozdziału frontendu i backendu w osobnych plikach - front jest w pliku .razor, back jest pliku o tej samej nazwie z rozszerzeniem .razor.cs.</p>
+
+<div>
+
+    <label for="ids">Wybierz który indeks chcesz subskrybować:</label>
+    <select @bind="id" name="ids" id="ids">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+    <br />
+
+    <p>Aktualna wartość z API dla wybranego indeksu to: @currentValue</p>
+
+</div>
+
+<button class="btn btn-primary" disabled=@requestSent @onclick="SubmitIntegerValue">Subscribe</button>
+<hr />

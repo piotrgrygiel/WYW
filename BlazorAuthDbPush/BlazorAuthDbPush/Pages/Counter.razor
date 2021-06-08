@@ -1,0 +1,104 @@
+﻿@page "/counter"
+
+@attribute [Authorize]
+
+@inject IJSRuntime JSRuntime
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject WywDbContext _db
+@*@inject ApiService ApiService
+@inject NavigationManager NavigationManager*@
+
+@using WebPush
+@using System.Text.Json
+@using BlazorAuthDbPush.Data
+@using Microsoft.EntityFrameworkCore
+@using System.Security.Claims
+
+<h1>Hello, world!</h1>
+
+<p>Przykład demonstruje prostą implementację notyfikacji push. Całość logiki jest obsługiwana w jednym pliku (strona razor). Można zachować taki mechanizm plus zaimplementować wzorzec observer, tak jak w tym drugim projekcie - wówczas notyfikację będą wywoływane ze strony ale triggerowane z usługi odpytującej Aviation API.</p>
+
+<label for="subscrBtn">naciśnij żeby poprosić o wysyłanie notyfikacji push:</label>
+<button class="btn btn-primary" id="subscrBtn" name="subscrBtn" @onclick="SubscribeNotifications">Subscribe to notifications</button>
+
+<br />
+
+<label for="someMsg">wpisz tekst notyfikacji push:</label>
+<input @bind="pushMsgText" type="text" id="someMsg" name="someMsg">
+<button class="btn btn-primary" @onclick="SendPushMsg">SendPush</button>
+
+@code {
+
+    string pushMsgText = null;
+
+    public async Task SendPushMsg()
+    {
+        var subscription = await _db.NotificationSubscriptions.Where(e => e.UserId == GetUserId()).SingleOrDefaultAsync();
+        if (subscription != null)
+        {
+            _ = SendNotificationAsync(subscription, pushMsgText);
+        }
+    }
+
+    public async Task SubscribeNotifications()
+    {
+        // In the background, ask if they want to be notified about order updates
+        await RequestNotificationSubscriptionAsync();
+    }
+
+    async Task RequestNotificationSubscriptionAsync()
+    {
+        var subscription = await JSRuntime.InvokeAsync<NotificationSubscription>("blazorPushNotifications.requestSubscription");
+        if (subscription != null)
+        {
+            await Subscribe(subscription);
+        }
+
+    }
+
+    private async Task<NotificationSubscription> Subscribe(NotificationSubscription subscription)
+    {
+        // We're storing at most one subscription per user, so delete old ones.
+        // Alternatively, you could let the user register multiple subscriptions from different browsers/devices.
+        var userId = GetUserId();
+        var oldSubscriptions = _db.NotificationSubscriptions.Where(e => e.UserId == userId);
+        _db.NotificationSubscriptions.RemoveRange(oldSubscriptions);
+
+        // Store new subscription
+        subscription.UserId = userId;
+        _db.NotificationSubscriptions.Attach(subscription);
+
+        await _db.SaveChangesAsync();
+        return subscription;
+    }
+
+    private string GetUserId()
+    {
+        var user = AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User;
+        return user.FindFirstValue(ClaimTypes.NameIdentifier);
+    }
+
+    private async Task SendNotificationAsync(NotificationSubscription subscription, string message)
+    {
+        // For a real application, generate your own
+        var publicKey = "BLC8GOevpcpjQiLkO7JmVClQjycvTCYWm6Cq_a7wJZlstGTVZvwGFFHMYfXt6Njyvgx_GlXJeo5cSiZ1y4JOx1o";
+        var privateKey = "OrubzSz3yWACscZXjFQrrtDwCKg-TGFuWhluQ2wLXDo";
+
+        var pushSubscription = new PushSubscription(subscription.Url, subscription.P256dh, subscription.Auth);
+        var vapidDetails = new VapidDetails("mailto:<someone@example.com>", publicKey, privateKey);
+        var webPushClient = new WebPushClient();
+        try
+        {
+            var payload = JsonSerializer.Serialize(new
+            {
+                message,
+                url = $"counter",
+            });
+            await webPushClient.SendNotificationAsync(pushSubscription, payload, vapidDetails);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine("Error sending push notification: " + ex.Message);
+        }
+    }
+}
