@@ -14,39 +14,50 @@
     <br>
     <button class="btn btn-primary" type="submit" @onclick="HandleValidSubmit">Check</button>
     <!-- <button class="btn btn-primary" type="submit">Subscribe</button> -->
-    
     <!-- <button class="btn btn-primary" @onclick="CheckFlight">Check</button> -->
     <!-- <button class="btn btn-primary" @onclick="SubsctibeFlight">Subscribe</button> -->
 
 </EditForm>
 
 <br>
+@if (!userFilledFlightNumber)
+{
+
+}
+else if (flightInfo != null)
+{
     <table class="table">
         <tbody>
-                <tr>
-                    <td><b>FLIGHT STATUS / ACTION</b></td>
-                </tr>
-                <tr>
-                    <td>FLIGHT STATUS / ACTION - Response</td>
-                </tr>
-                <tr>
-                    <td><b>TIME REMAINING</b></td>
-                </tr>
-                <tr>
-                    <td>TIME REMAINING - Response</td>
-                </tr>
-                <tr>
-                    <td><b>TERMINAL</b></td>
-                </tr>
-                <tr>
-                    <td>TERMINAL - Response</td>
-                </tr>
-                 <tr>
-                    <td><b>GATE</b></td>
-                </tr>
-                <tr>
-                    <td>GATE - Response</td>
-                </tr>
+            <tr>
+                <td><b>FLIGHT STATUS / ACTION</b></td>
+            </tr>
+            <tr>
+                <td>@flightInfo.status</td>
+            </tr>
+            <tr>
+                <td><b>DEPARTURE TIME</b></td>
+            </tr>
+            <tr>
+                <td>@flightInfo.departure.scheduledTime.ToLocalTime()</td>
+            </tr>
+            <tr>
+                <td><b>TERMINAL</b></td>
+            </tr>
+            <tr>
+                <td>@flightInfo.departure.terminal</td>
+            </tr>
+            <tr>
+                <td><b>GATE</b></td>
+            </tr>
+            <tr>
+                <td>@flightInfo.departure.gate</td>
+            </tr>
         </tbody>
     </table>
+}
+else
+{
+    <p>Flight not found</p>
+}
+
 
