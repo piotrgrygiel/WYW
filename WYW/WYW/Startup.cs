@@ -31,7 +31,7 @@ namespace WYW
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            //ustawienie zrodla danych jako "lokalna" baza danych SQLite "wyw.db" 
+            //data source set as "local" db with SQLite "wyw.db" 
             services.AddDbContext<WywDbContext>(options =>
                 options.UseSqlite("Data Source=wyw.db"));
 
