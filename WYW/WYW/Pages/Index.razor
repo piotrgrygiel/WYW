@@ -4,19 +4,21 @@
 
 
 <h1>Your Flight Number</h1>
-<EditForm Model="@inputfdModel" >
-    <InputText id="flightno" @bind-Value="inputfdModel.Name" />
+<EditForm Model="@inputfdModel">
+    <InputText id="flightno" @bind-Value=inputfdModel.Name />
     <br>
-    <button class="btn btn-primary" type="submit" @onclick="HandleValidSubmit">Check</button>
-    <button class="btn btn-primary" type="submit">Subscribe</button>
+    <input type="submit" class="btn btn-primary" value="Checkout" />
+    <ValidationMessage For="() => inputfdModel.Name" />
+    @*<button class="btn btn-primary" type="submit" @onclick="HandleValidSubmit">Check</button>
+        <button class="btn btn-primary" type="submit">Subscribe</button>*@
 
     <!-- <button class="btn btn-primary" @onclick="CheckFlight">Check</button> -->
     <!-- <button class="btn btn-primary" @onclick="SubsctibeFlight">Subscribe</button> -->
-    
+
 </EditForm>
 
 <br>
-<TableTemplate>
+@*<TableTemplate>
     <TableHeader>
         <th>ID</th>
         <th>Name</th>
@@ -25,7 +27,7 @@
         <td>Text</td>
         <td>Text</td>
     </RowTemplate>
-</TableTemplate>
+</TableTemplate>*@
 
 @code {
     
