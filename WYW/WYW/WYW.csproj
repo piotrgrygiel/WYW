@@ -1,30 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>aspnet-WYW-4ECEBEF8-38AB-4375-8D95-4A98DE00D6B8</UserSecretsId>
     <Configurations>Debug;Release;Testing</Configurations>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Testing|AnyCPU'">
     <DefineConstants>TRACE;TEST</DefineConstants>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>TRACE;DEBUG;DBG</DefineConstants>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants>TRACE;PROD</DefineConstants>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="AntDesign" Version="0.8.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.5" />
+    <PackageReference Include="AntDesign" Version="0.8.1"/>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.5"/>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.5"/>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.5"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.7"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.5"/>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7"/>
   </ItemGroup>
-
 </Project>
