@@ -44,6 +44,10 @@ namespace WYW
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddSingleton<WeatherForecastService>();
+            services.AddHttpClient();
+            ApiResponseService ApiService = new ApiResponseService();
+            Task.Run( () => ApiService.CheckTheApiEvery5s());
+            services.AddSingleton<ApiResponseService>(ApiService);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
