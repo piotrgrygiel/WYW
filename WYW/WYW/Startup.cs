@@ -43,8 +43,7 @@ namespace WYW
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddSingleton<WeatherForecastService>();
-            services.AddHttpClient();
+
             ApiResponseService ApiService = new ApiResponseService();
             Task.Run( () => ApiService.CheckTheApiEvery5m());
             services.AddSingleton<ApiResponseService>(ApiService);
