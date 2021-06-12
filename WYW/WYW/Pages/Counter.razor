@@ -2,12 +2,20 @@
 
 <h1>Counter</h1>
 
+<p>@testText</p>
+
 <p>Current count: @currentCount</p>
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
 @code {
     private int currentCount = 0;
+
+#if TEST || DBG
+    private string testText = "testing";
+#elif PROD
+    private string testText = "production";
+#endif
 
     private void IncrementCount()
     {

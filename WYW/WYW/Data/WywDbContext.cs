@@ -6,9 +6,9 @@ using System.Text;
 
 namespace WYW.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class WywDbContext : IdentityDbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public WywDbContext(DbContextOptions<WywDbContext> options)
             : base(options)
         {
         }
