@@ -46,7 +46,7 @@ namespace WYW
             services.AddSingleton<WeatherForecastService>();
             services.AddHttpClient();
             ApiResponseService ApiService = new ApiResponseService();
-            Task.Run( () => ApiService.CheckTheApiEvery5s());
+            Task.Run( () => ApiService.CheckTheApiEvery5m());
             services.AddSingleton<ApiResponseService>(ApiService);
         }
 

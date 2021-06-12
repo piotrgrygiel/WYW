@@ -11,12 +11,12 @@ namespace WYW.Pages
         private inputModel inputfdModel = new inputModel();
         [Inject]
         private ApiResponseService ApiService { get; set; }
-        private string apiRespText = "";
+        private string testApiString = "";
 
         private void HandleValidSubmit()
         {
             Logger.LogInformation("HandleValidSubmit called");
-            apiRespText = ApiService.ToString();
+            testApiString = ApiService.RecentResponse.LastResponse[0].airline.name;
         }
     }
 }
