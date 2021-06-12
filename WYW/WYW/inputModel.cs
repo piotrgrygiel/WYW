@@ -4,7 +4,7 @@ namespace WYW
     public class inputModel
     {
     [Required]
-    [StringLength(10, ErrorMessage = "Name is too long.")]
+    [RegularExpression(@"^[A-Z]{2}\d{3,4}$", ErrorMessage = "Wrong Flight No.")]
     public string Name { get; set; }
     }
 }
