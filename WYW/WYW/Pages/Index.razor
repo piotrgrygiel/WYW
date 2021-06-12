@@ -4,6 +4,7 @@
 
 
 <h1>Your Flight Number</h1>
+
 <EditForm Model="@inputfdModel" OnValidSubmit="@HandleValidSubmit">
 
     <DataAnnotationsValidator />
@@ -20,19 +21,32 @@
 </EditForm>
 
 <br>
-<TableTemplate>
-    <TableHeader>
-        <th>ID</th>
-        <th>Name</th>
-    </TableHeader>
-    <RowTemplate>
-        <td>Text</td>
-        <td>Text</td>
-    </RowTemplate>
-</TableTemplate>
+    <table class="table">
+        <tbody>
+                <tr>
+                    <td><b>FLIGHT STATUS / ACTION</b></td>
+                </tr>
+                <tr>
+                    <td>FLIGHT STATUS / ACTION - Response</td>
+                </tr>
+                <tr>
+                    <td><b>TIME REMAINING</b></td>
+                </tr>
+                <tr>
+                    <td>TIME REMAINING - Response</td>
+                </tr>
+                <tr>
+                    <td><b>TERMINAL</b></td>
+                </tr>
+                <tr>
+                    <td>TERMINAL - Response</td>
+                </tr>
+                 <tr>
+                    <td><b>GATE</b></td>
+                </tr>
+                <tr>
+                    <td>GATE - Response</td>
+                </tr>
+        </tbody>
+    </table>
 
-<p>@testApiString</p>
-
-@code {
-    
-}
