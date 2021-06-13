@@ -44,7 +44,7 @@ namespace WYW
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-#if PROD
+#if PROD || DEBUG
             ApiResponseService apiService = new ApiResponseService();
             Task.Run( () => apiService.CheckTheApiEvery5m());
 
