@@ -10,9 +10,9 @@ namespace WYW.Pages
     public partial class Index
     {
         [Inject]
-        ILogger<inputModel> Logger {get; set;}
+        ILogger<InputModel> Logger {get; set;}
 
-        private inputModel inputfdModel = new inputModel();
+        private InputModel inputfdModel = new InputModel();
 
         [Inject]
         private IApiResponseService ApiService { get; set; }
@@ -29,7 +29,7 @@ namespace WYW.Pages
 
             userFilledFlightNumber = true;
 
-            flightInfo = ApiService.RecentResponse.LastResponse.FirstOrDefault(flight => flight.flight.number.Equals(inputfdModel.getNumber(), StringComparison.InvariantCultureIgnoreCase));
+            flightInfo = ApiService.RecentResponse.LastResponse.FirstOrDefault(flight => flight.flight.number.Equals(inputfdModel.GetNumber(), StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }
