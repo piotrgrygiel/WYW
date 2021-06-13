@@ -46,10 +46,10 @@ else if (flightInfo != null)
                 <td>@flightInfo.status</td>
             </tr>
             <tr>
-                <td><b>DEPARTURE TIME</b></td>
+                <td><b>TIME TO DEPARTURE</b></td>
             </tr>
             <tr>
-                <td>@flightInfo.departure.scheduledTime.ToLocalTime()</td>
+                <td>@($"{TimeToDeparture:h\\:mm}")</td>
             </tr>
             <tr>
                 <td><b>TERMINAL</b></td>
