@@ -13,11 +13,12 @@
                             <ValidationSummary />
                         </div>
                 </div>
-                <div class="form-row">
+                <div class="form-row"> 
                     <div class="form-group col">    
                         <InputText id="flightno" @bind-Value="inputfdModel.Name" />
-                    </div>
                     </div> 
+                </div> 
+                
                 <div class="form-row">
                     <div class="form-group col">  
                         <button class="btn btn-primary" type="submit" @onclick="HandleValidSubmit">Check</button>
@@ -28,6 +29,7 @@
                 </div> 
             </EditForm>
         </div>
+        
 </div>
 
 <br>
@@ -72,3 +74,50 @@ else
 }
 
 
+            <table class="table">
+        <tbody>
+            <tr>
+                <td><b>FLIGHT NR</b></td>
+                <td><b>DESTINATION</b></td>
+                <td><b>TIME</b></td>
+                <td><b>TYPE</b></td>
+            </tr>
+
+            @foreach (var record in ApiService.RecentResponse.LastResponse)
+            {
+                @if (record.type == "arrival")
+                {
+            <tr>
+                <td>@record.flight.iataNumber</td>
+                <td>@record.arrival.iataCode</td>
+                <td>@record.arrival.scheduledTime.ToLocalTime()</td>
+                <td>@record.type</td>
+            </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+            <table class="table">
+        <tbody>
+            <tr>
+                <td><b>FLIGHT NR</b></td>
+                <td><b>DESTINATION</b></td>
+                <td><b>TIME</b></td>
+                <td><b>TYPE</b></td>
+            </tr>
+
+            @foreach (var record in ApiService.RecentResponse.LastResponse)
+            {
+                @if (record.type == "departure")
+                {
+            <tr>
+                <td>@record.flight.iataNumber</td>
+                <td>@record.arrival.iataCode</td>
+                <td>@record.arrival.scheduledTime.ToLocalTime()</td>
+                <td>@record.type</td>
+            </tr>
+                }
+            }
+        </tbody>
+    </table>
