@@ -10,7 +10,7 @@ namespace WYW
 
         public string getNumber()
         {
-            string number = Name.Substring(iataLength+1);
+            string number = Name.Substring(iataLength);
             for(int i=0; i < number.Length; i++)
             {
                 if(System.Char.IsDigit(number[i]))
