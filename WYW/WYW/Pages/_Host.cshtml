@@ -17,7 +17,7 @@
     <link href="WYW.styles.css" rel="stylesheet" />
 </head>
 <body>
-    <component type="typeof(App)" render-mode="ServerPrerendered" />
+    <component type="typeof(App)" render-mode="Server" />
 
     <div id="blazor-error-ui">
         <environment include="Staging,Production">
@@ -31,5 +31,6 @@
     </div>
 
     <script src="_framework/blazor.server.js"></script>
+    <script src="~/UserTime.js"></script>
 </body>
 </html>

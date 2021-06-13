@@ -18,6 +18,9 @@ namespace WYW.Pages
         [Inject]
         private IDateTime DateTimeService { get; set; }
 
+        [Inject]
+        private UserTimeZoneService TimeZoneService { get; set; }
+
         private FlightInfo flightInfo = null;
         private bool userFilledFlightNumber = false;
         private InputModel inputfdModel = new InputModel();
@@ -32,20 +35,27 @@ namespace WYW.Pages
 
             flightInfo = ApiService.RecentResponse.LastResponse.FirstOrDefault(flight => flight.flight.number.Equals(inputfdModel.GetNumber(), StringComparison.InvariantCultureIgnoreCase));
 
-            if (flightInfo != null && timer == null)
+            if (flightInfo != null)
             {
-                timer = new Timer((e) => { UpdateTimeToDeparture(); }, null, TimeSpan.Zero, TimeSpan.FromSeconds(60));
+                if (timer == null)
+                {
+                    timer = new Timer((e) => { UpdateTimeToDeparture(); }, null, TimeSpan.Zero, TimeSpan.FromSeconds(60));
+                }
+                else
+                {
+                    UpdateTimeToDeparture();
+                }
             }
         }
 
-        private void UpdateTimeToDeparture()
+        private async void UpdateTimeToDeparture()
         {
-            var now = DateTimeService.Now();
-            var departureTime = flightInfo == null ? now : flightInfo.departure.scheduledTime.ToLocalTime();
+            var now = await TimeZoneService.GetLocalDateTime(DateTimeOffset.UtcNow);
+            var departureTime = flightInfo == null ? now : flightInfo.departure.scheduledTime;
 
-            TimeToDeparture = departureTime - now;
+            TimeToDeparture = departureTime - now + now.Offset;
 
-            InvokeAsync(StateHasChanged);
+            await InvokeAsync(StateHasChanged);
         }
 
         public void Dispose()
