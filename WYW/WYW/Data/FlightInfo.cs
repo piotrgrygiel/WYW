@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WYW
+namespace WYW.Data
 {
     public class RecentResponse
     {
@@ -53,11 +53,11 @@ namespace WYW
         public string delay { get; set; }
         public DateTime? estimatedRunway { get; set; }
         public object estimatedTime { get; set; }
-        public string gate { get; set; }
+        public object gate { get; set; }
         public string iataCode { get; set; }
         public string icaoCode { get; set; }
         public DateTime scheduledTime { get; set; }
-        public string terminal { get; set; }
+        public object terminal { get; set; }
     }
 
     public class Flight
