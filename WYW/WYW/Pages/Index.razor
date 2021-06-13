@@ -1,0 +1,63 @@
+@page "/"
+@using Microsoft.Extensions.Logging
+
+
+
+<h1>Your Flight Number</h1>
+
+<EditForm Model="@inputfdModel" OnValidSubmit="@HandleValidSubmit">
+
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <InputText id="flightno" @bind-Value="inputfdModel.Name" />
+    <br>
+    <button class="btn btn-primary" type="submit" @onclick="HandleValidSubmit">Check</button>
+    <!-- <button class="btn btn-primary" type="submit">Subscribe</button> -->
+    <!-- <button class="btn btn-primary" @onclick="CheckFlight">Check</button> -->
+    <!-- <button class="btn btn-primary" @onclick="SubsctibeFlight">Subscribe</button> -->
+
+</EditForm>
+
+<br>
+@if (!userFilledFlightNumber)
+{
+
+}
+else if (flightInfo != null)
+{
+    <table class="table">
+        <tbody>
+            <tr>
+                <td><b>FLIGHT STATUS / ACTION</b></td>
+            </tr>
+            <tr>
+                <td>@flightInfo.status</td>
+            </tr>
+            <tr>
+                <td><b>DEPARTURE TIME</b></td>
+            </tr>
+            <tr>
+                <td>@flightInfo.departure.scheduledTime.ToLocalTime()</td>
+            </tr>
+            <tr>
+                <td><b>TERMINAL</b></td>
+            </tr>
+            <tr>
+                <td>@flightInfo.departure.terminal</td>
+            </tr>
+            <tr>
+                <td><b>GATE</b></td>
+            </tr>
+            <tr>
+                <td>@flightInfo.departure.gate</td>
+            </tr>
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Flight not found</p>
+}
+
+
