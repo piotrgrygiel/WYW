@@ -30,7 +30,8 @@ namespace WYW.Pages
             userFilledFlightNumber = true;
             var flNumber = inputfdModel.Name.ToUpper();
 
-            flightInfo = ApiService.RecentResponse.LastResponse.FirstOrDefault(f => f.flight.iataNumber.ToUpper() == flNumber);
+            flightInfo = ApiService.RecentResponse.LastResponse.FirstOrDefault(flight => flight.flight.number.Equals(inputfdModel.getNumber(), StringComparison.InvariantCultureIgnoreCase));
+
         }
     }
 }

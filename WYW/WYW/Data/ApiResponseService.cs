@@ -8,8 +8,8 @@ namespace WYW.Data
 
     public class ApiResponseService : IApiResponseService
     {
-        private string uri = "https://aviation-edge.com/v2/public/timetable?key=777139-df23dc&iataCode=POZ&type=departure";
 
+        static string uri = "https://aviation-edge.com/v2/public/timetable?key=777139-df23dc&iataCode=POZ";
         public RecentResponse RecentResponse { get; set; }
         //public event Action<FlightInfo> SomeDataChanged;
 
