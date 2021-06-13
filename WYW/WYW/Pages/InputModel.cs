@@ -7,11 +7,11 @@ namespace WYW.Pages
         [Required]
         [RegularExpression(@".*\d{3,4}$", ErrorMessage = "Wrong Flight No.")]
         public string Name { get; set; }
-        private int iataLength = 2;
+        private int maxNumberLength = 4;
 
         public string GetNumber()
         {
-            string number = Name.Substring(iataLength);
+            string number = Name.Substring(Name.Length - maxNumberLength);
             for(int i=0; i < number.Length; i++)
             {
                 if(System.Char.IsDigit(number[i]))
