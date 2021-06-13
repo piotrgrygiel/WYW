@@ -44,9 +44,20 @@ namespace WYW
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            ApiResponseService ApiService = new ApiResponseService();
-            Task.Run( () => ApiService.CheckTheApiEvery5m());
-            services.AddSingleton<ApiResponseService>(ApiService);
+#if PROD
+            ApiResponseService apiService = new ApiResponseService();
+            Task.Run( () => apiService.CheckTheApiEvery5m());
+
+            RealDateTime dateTime = new RealDateTime();
+#else
+            MockApiService apiService = new MockApiService();
+
+            MockDateTime dateTime = new MockDateTime();
+            dateTime.ResetTime(DateTime.Now);
+#endif
+
+            services.AddSingleton<IApiResponseService>(apiService);
+            services.AddSingleton<IDateTime>(dateTime);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

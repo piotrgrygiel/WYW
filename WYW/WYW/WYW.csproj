@@ -14,12 +14,12 @@
     <DefineConstants>TRACE;PROD</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AntDesign" Version="0.8.1"/>
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.5"/>
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.5"/>
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.5"/>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.7"/>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.5"/>
-    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7"/>
+    <PackageReference Include="AntDesign" Version="0.8.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.5" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
   </ItemGroup>
 </Project>
