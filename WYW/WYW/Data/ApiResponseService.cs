@@ -10,8 +10,7 @@ namespace WYW
 
     public class ApiResponseService
     {
-        static string uri = "https://aviation-edge.com/v2/public/timetable?key=777139-df23dc&iataCode=POZ&type=departure";
-
+        static string uri = "https://aviation-edge.com/v2/public/timetable?key=777139-df23dc&iataCode=POZ";
         public RecentResponse RecentResponse { get; set; }
         private RecentResponse PreviousResponse { get; set; }
 

@@ -22,7 +22,7 @@ namespace WYW.Pages
 
             userFilledFlightNumber = true;
 
-            flightInfo = ApiService.RecentResponse.LastResponse.FirstOrDefault(flight => flight.flight.iataNumber.Equals(inputfdModel.Name, StringComparison.InvariantCultureIgnoreCase));
+            flightInfo = ApiService.RecentResponse.LastResponse.FirstOrDefault(flight => flight.flight.number.Equals(inputfdModel.getNumber(), StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }
