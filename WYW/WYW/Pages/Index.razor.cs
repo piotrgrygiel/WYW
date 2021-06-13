@@ -28,10 +28,8 @@ namespace WYW.Pages
             Logger.LogInformation("HandleValidSubmit called");
 
             userFilledFlightNumber = true;
-            var flNumber = inputfdModel.Name.ToUpper();
 
             flightInfo = ApiService.RecentResponse.LastResponse.FirstOrDefault(flight => flight.flight.number.Equals(inputfdModel.getNumber(), StringComparison.InvariantCultureIgnoreCase));
-
         }
     }
 }
