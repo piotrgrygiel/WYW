@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BlazorStrap;
 using WYW.Areas.Identity;
 using WYW.Data;
 
@@ -43,6 +44,7 @@ namespace WYW
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddBootstrapCss();
 
 #if PROD || DEBUG
             ApiResponseService apiService = new ApiResponseService();
