@@ -1,136 +1,146 @@
 ﻿@page "/"
 @using Microsoft.Extensions.Logging
+@using WYW.Data
 @inject IJSRuntime JSRuntime;
+@using BlazorStrap;
+@using BlazorStrap.Extensions.BSDataTable;
 
-<div class="card m-3">
-    <h2 class="card-header"> Enter Your Flight Number: </h2> 
-        <div class="card-body">
-
-            <EditForm Model="@inputfdModel" OnValidSubmit="@HandleValidSubmit">
-                <div class="form-row">
-                    <div class="form-group col">
-                        <DataAnnotationsValidator />
-                        <ValidationSummary />
-                    </div>
+<BSTabGroup ShowEvent="@Show" HiddenEvent="@Hidden" HideEvent="@Hide" ShownEvent="@Shown">
+    <BSTabList>
+        <BSTab>
+            <BSTabLabel>Moje Loty</BSTabLabel>
+            <BSTabContent>
+                <div class="card m-3">
+                    <h2 class="card-header"> TWÓJ LOT: </h2> 
                 </div>
-                @*<div class="form-row">
-            <div class="form-group col">
-                <InputText id="flightno" @bind-Value="inputfdModel.Name" />
-            </div>
-        </div>*@
-                <div class="form-row">
-                    <div class="form-group col">
-                        <InputSelect id="flightno" @bind-Value="inputfdModel.Name" class="form-control">
-                        @foreach (var value in ApiService.RecentResponse.LastResponse)
-                        {
-                            <option value=@value.flight.iataNumber>@value.flight.iataNumber</option>
-                        }
-                            
-                        </InputSelect>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group col">
-                        <button class="btn btn-primary" type="submit" @onclick="HandleValidSubmit">Check</button>
-                    </div>
-                    <div class="form-group col">
-                        <button class="btn btn-primary" type="submit">Subscribe</button>
-                    </div>
-                </div>
-            </EditForm>
-        </div>
-        
-</div>
-
-<br>
-@if (!userFilledFlightNumber)
-{
-
-}
-else if (flightInfo != null)
-{
-    <table class="table">
-        <tbody>
-            <tr>
-                <td><b>FLIGHT STATUS / ACTION</b></td>
-            </tr>
-            <tr>
-                <td>@flightInfo.status</td>
-            </tr>
-            <tr>
-                <td><b>DEPARTURE TIME</b></td>
-            </tr>
-            <tr>
-                <td>@flightInfo.departure.scheduledTime.ToLocalTime()</td>
-            </tr>
-            <tr>
-                <td><b>TERMINAL</b></td>
-            </tr>
-            <tr>
-                <td>@flightInfo.departure.terminal</td>
-            </tr>
-            <tr>
-                <td><b>GATE</b></td>
-            </tr>
-            <tr>
-                <td>@flightInfo.departure.gate</td>
-            </tr>
-        </tbody>
-    </table>
-}
-else
-{
-    <p>Flight not found</p>
-}
-
-
-            <table class="table">
-        <tbody>
-            <tr>
-                <td><b>FLIGHT NR</b></td>
-                <td><b>DESTINATION</b></td>
-                <td><b>TIME</b></td>
-                <td><b>TYPE</b></td>
-            </tr>
-
-            @foreach (var record in ApiService.RecentResponse.LastResponse)
-            {
-                @if (record.type == "arrival")
+                <br>
+                @if (chosenFlightInfo != null)
                 {
-            <tr>
-                <td>@record.flight.iataNumber</td>
-                <td>@record.arrival.iataCode</td>
-                <td>@record.arrival.scheduledTime.ToLocalTime()</td>
-                <td>@record.type</td>
-            </tr>
+                    <BSTable>
+                        <BS_thead>
+                            <BS_tr>
+                                <BS_th scope="col">STATUS LOTU</BS_th>
+                                <BS_th scope="col">CZAS DO ODLOTU</BS_th>
+                                <BS_th scope="col">TERMINAL</BS_th>
+                                <BS_th scope="col">BRAMKA</BS_th>
+                            </BS_tr>
+                        </BS_thead>
+                        <BS_tbody>
+                            <BS_tr>
+                                <BS_td>@chosenFlightInfo.FlightInfo.status</BS_td>
+                                <BS_td>@($"{chosenFlightInfo.TimeToDeparture:h\\:mm}")</BS_td>
+                                <BS_td>@chosenFlightInfo.FlightInfo.departure.terminal</BS_td>
+                                <BS_td>@chosenFlightInfo.FlightInfo.departure.gate</BS_td>
+                            </BS_tr>
+                        </BS_tbody>
+                    </BSTable>
                 }
-            }
-        </tbody>
-    </table>
-
-            <table class="table">
-        <tbody>
-            <tr>
-                <td><b>FLIGHT NR</b></td>
-                <td><b>DESTINATION</b></td>
-                <td><b>TIME</b></td>
-                <td><b>TYPE</b></td>
-            </tr>
-
-            @foreach (var record in ApiService.RecentResponse.LastResponse)
-            {
-                @if (record.type == "departure")
+                else
                 {
-            <tr>
-                <td>@record.flight.iataNumber</td>
-                <td>@record.arrival.iataCode</td>
-                <td>@record.departure.scheduledTime.ToLocalTime()</td>
-                <td>@record.type</td>
-            </tr>
+                    <p>Wybierz lot z zakładki odloty</p>
                 }
-            }
-        </tbody>
-    </table>
-
-
+            </BSTabContent>
+        </BSTab>
+        <BSTab>
+            <BSTabLabel>Przyloty</BSTabLabel>
+                <BSTabContent>
+                    <BSDataTable Items="flightInfos" Context="record" IsResponsive="true" IsStriped="true" @ref="SortableRef">
+                        <HeaderTemplate>
+                            <BS_tr>
+                                <BS_th scope="col">DODAJ</BS_th>
+                                <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataNumber"))" @onclick:preventDefault>NUMER LOTU</a></BS_th>
+                                <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("TimeToArrival"))" @onclick:preventDefault>CZAS DO ODLOTU</a></BS_th>
+                            </BS_tr>
+                        </HeaderTemplate>
+                        <ItemTemplate>
+                            @if (record.FlightInfo.type == "arrival")
+                            {
+                                <BS_td>
+                                    <BSButton Color="Color.Primary" @onclick="() => GetFlightDetailsIMainTab(record)">Dodaj</BSButton>
+                                </BS_td>
+                                <BS_td>
+                                    <BSButton Color="Color.Primary" @onclick="() => ExpandFlight(record)">@record.iataNumber</BSButton>
+                                </BS_td>
+                                <BS_td>@($"{record.TimeToArrival:h\\:mm}")</BS_td>
+                                <BSCollapse IsOpen="@record.IsOpen">
+                                        <BSCard CardType="CardType.Card">
+                                            <BSCard CardType="CardType.Text">Flight details</BSCard>
+                                            <BSTable>
+                                                <BS_thead>
+                                                    <BS_tr>
+                                                        <BS_th scope="col">FLIGHT STATUS / ACTION</BS_th>
+                                                        <BS_th scope="col">ARRIVAL TIME</BS_th>
+                                                        <BS_th scope="col">TERMINAL</BS_th>
+                                                        <BS_th scope="col">GATE</BS_th>
+                                                    </BS_tr>
+                                                </BS_thead>
+                                                <BS_tbody>
+                                                    <BS_tr>
+                                                        <BS_td>@record.FlightInfo.status</BS_td>
+                                                        <BS_td>@TimeZoneService.GetLocalDateTime(record.FlightInfo.arrival.scheduledTime)</BS_td>
+                                                        <BS_td>@record.FlightInfo.arrival.terminal</BS_td>
+                                                        <BS_td>@record.FlightInfo.arrival.gate</BS_td>
+                                                    </BS_tr>
+                                                </BS_tbody>
+                                            </BSTable>
+                                        </BSCard>
+                                </BSCollapse>
+                            }
+                        </ItemTemplate>
+                    </BSDataTable>
+                </BSTabContent>
+            </BSTab>
+            <BSTab>
+                <BSTabLabel>Odloty</BSTabLabel>
+                <BSTabContent>
+                    <BSDataTable Items="flightInfos" Context="record" IsResponsive="true" IsStriped="true" @ref="SortableRef">
+                        <HeaderTemplate>
+                            <BS_tr>
+                                <BS_th scope="col">DODAJ</BS_th>
+                                <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataNumber"))" @onclick:preventDefault>NUMER LOTU</a></BS_th>
+                                <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataCode"))" @onclick:preventDefault>LOT DO</a></BS_th>
+                                <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("TimeToDeparture"))" @onclick:preventDefault>CZAS DO ODLOTU</a></BS_th>
+                            </BS_tr>
+                        </HeaderTemplate>
+                        <ItemTemplate>
+                            @if (record.FlightInfo.type == "departure")
+                            {
+                                <BS_td>
+                                    <BSButton Color="Color.Primary" @onclick="() => GetFlightDetailsIMainTab(record)">Dodaj</BSButton>
+                                </BS_td>
+                                <BS_td>
+                                    <BSButton Color="Color.Primary" @onclick="() => ExpandFlight(record)">@record.iataNumber</BSButton>
+                                </BS_td>
+                                <BS_td>@record.iataCode</BS_td>
+                                <BS_td>@($"{record.TimeToDeparture:h\\:mm}")</BS_td>
+                                <BSCollapse IsOpen="@record.IsOpen">
+                                        <BSCard CardType="CardType.Card">
+                                            <BSCard CardType="CardType.Text">Flight details</BSCard>
+                                            <BSTable>
+                                                <BS_thead>
+                                                    <BS_tr>
+                                                        <BS_th scope="col">FLIGHT STATUS / ACTION</BS_th>
+                                                        <BS_th scope="col">DEPARTURE TIME</BS_th>
+                                                        <BS_th scope="col">TERMINAL</BS_th>
+                                                        <BS_th scope="col">GATE</BS_th>
+                                                    </BS_tr>
+                                                </BS_thead>
+                                                <BS_tbody>
+                                                    <BS_tr>
+                                                        <BS_td>@record.FlightInfo.status</BS_td>
+                                                        <BS_td>@TimeZoneService.GetLocalDateTime(record.FlightInfo.departure.scheduledTime)</BS_td>
+                                                        <BS_td>@record.FlightInfo.departure.terminal</BS_td>
+                                                        <BS_td>@record.FlightInfo.departure.gate</BS_td>
+                                                    </BS_tr>
+                                                </BS_tbody>
+                                            </BSTable>
+                                        </BSCard>
+                                </BSCollapse>
+                            }
+                        </ItemTemplate>
+                    </BSDataTable>
+                </BSTabContent>
+            </BSTab>
+        </BSTabList>
+    <BSTabSelectedContent/>
+</BSTabGroup>

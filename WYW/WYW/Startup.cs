@@ -13,8 +13,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BlazorStrap;
 using WYW.Areas.Identity;
 using WYW.Data;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Http;
 
 namespace WYW
 {
@@ -43,6 +46,13 @@ namespace WYW
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddBootstrapCss();
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+            services.AddHttpContextAccessor();
 
 #if PROD || DEBUG
             ApiResponseService apiService = new ApiResponseService();
@@ -85,6 +95,7 @@ namespace WYW
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseCookiePolicy();
 
             app.UseEndpoints(endpoints =>
             {
