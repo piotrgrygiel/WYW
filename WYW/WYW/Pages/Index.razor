@@ -1,136 +1,71 @@
 ﻿@page "/"
 @using Microsoft.Extensions.Logging
+@using WYW.Data
 @inject IJSRuntime JSRuntime;
+@using BlazorStrap;
 
-<div class="card m-3">
-    <h2 class="card-header"> Enter Your Flight Number: </h2> 
-        <div class="card-body">
-
-            <EditForm Model="@inputfdModel" OnValidSubmit="@HandleValidSubmit">
-                <div class="form-row">
-                    <div class="form-group col">
-                        <DataAnnotationsValidator />
-                        <ValidationSummary />
-                    </div>
-                </div>
-                @*<div class="form-row">
-            <div class="form-group col">
-                <InputText id="flightno" @bind-Value="inputfdModel.Name" />
-            </div>
-        </div>*@
-                <div class="form-row">
-                    <div class="form-group col">
-                        <InputSelect id="flightno" @bind-Value="inputfdModel.Name" class="form-control">
-                        @foreach (var value in ApiService.RecentResponse.LastResponse)
-                        {
-                            <option value=@value.flight.iataNumber>@value.flight.iataNumber</option>
-                        }
-                            
-                        </InputSelect>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group col">
-                        <button class="btn btn-primary" type="submit" @onclick="HandleValidSubmit">Check</button>
-                    </div>
-                    <div class="form-group col">
-                        <button class="btn btn-primary" type="submit">Subscribe</button>
-                    </div>
-                </div>
-            </EditForm>
-        </div>
-        
-</div>
-
-<br>
-@if (!userFilledFlightNumber)
-{
-
-}
-else if (flightInfo != null)
-{
-    <table class="table">
-        <tbody>
-            <tr>
-                <td><b>FLIGHT STATUS / ACTION</b></td>
-            </tr>
-            <tr>
-                <td>@flightInfo.status</td>
-            </tr>
-            <tr>
-                <td><b>DEPARTURE TIME</b></td>
-            </tr>
-            <tr>
-                <td>@flightInfo.departure.scheduledTime.ToLocalTime()</td>
-            </tr>
-            <tr>
-                <td><b>TERMINAL</b></td>
-            </tr>
-            <tr>
-                <td>@flightInfo.departure.terminal</td>
-            </tr>
-            <tr>
-                <td><b>GATE</b></td>
-            </tr>
-            <tr>
-                <td>@flightInfo.departure.gate</td>
-            </tr>
-        </tbody>
-    </table>
-}
-else
-{
-    <p>Flight not found</p>
-}
-
-
-            <table class="table">
-        <tbody>
-            <tr>
-                <td><b>FLIGHT NR</b></td>
-                <td><b>DESTINATION</b></td>
-                <td><b>TIME TO ARRIVAL</b></td>
-                <td><b>TYPE</b></td>
-            </tr>
-
-            @foreach (var record in flightInfos)
-            {
-                @if (record.FlightInfo.type == "arrival")
-                {
-                    <tr>
-                        <td>@record.FlightInfo.flight.iataNumber</td>
-                        <td>@record.FlightInfo.arrival.iataCode</td>
-                        <td>@($"{record.TimeToArrival:h\\:mm}")</td>
-                        <td>@record.FlightInfo.type</td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
-
-            <table class="table">
-        <tbody>
-            <tr>
-                <td><b>FLIGHT NR</b></td>
-                <td><b>DESTINATION</b></td>
-                <td><b>TIME TO DEPARTURE</b></td>
-                <td><b>TYPE</b></td>
-            </tr>
-
-            @foreach (var record in flightInfos)
-            {
-                @if (record.FlightInfo.type == "departure")
-                {
-            <tr>
-                <td>@record.FlightInfo.flight.iataNumber</td>
-                <td>@record.FlightInfo.arrival.iataCode</td>
-                <td>@($"{record.TimeToDeparture:h\\:mm}")</td>
-                <td>@record.FlightInfo.type</td>
-            </tr>
-                }
-            }
-        </tbody>
-    </table>
-
-
+<BSTabGroup ShowEvent="@Show" HiddenEvent="@Hidden" HideEvent="@Hide" ShownEvent="@Shown">
+    <BSTabList>
+        <BSTab>
+            <BSTabLabel>Moje Loty</BSTabLabel>
+            <BSTabContent>
+             Moje Loty            
+            </BSTabContent>
+        </BSTab>
+        <BSTab>
+            <BSTabLabel>Przyloty</BSTabLabel>
+                <BSTabContent>
+                    <BSTable>
+                        <BS_thead>
+                            <BS_tr>
+                                <BS_th scope="col">FLIGHT NR</BS_th>
+                                <BS_th scope="col">DESTINATION</BS_th>
+                                <BS_th scope="col">TIME</BS_th>
+                            </BS_tr>
+                        </BS_thead>
+                        <BS_tbody>
+                            @foreach (var record in ApiService.RecentResponse.LastResponse)
+                            {
+                                @if (record.type == "arrival")
+                                {
+                                    <BS_tr>
+                                        <BS_td>@record.flight.iataNumber</BS_td>
+                                        <BS_td>@record.arrival.iataCode</BS_td>
+                                        <BS_td>@record.arrival.scheduledTime.ToLocalTime()</BS_td>
+                                    </BS_tr>
+                                }
+                            }
+                        </BS_tbody>
+                    </BSTable>
+                </BSTabContent>
+            </BSTab>
+            <BSTab>
+                <BSTabLabel>Odloty</BSTabLabel>
+                <BSTabContent>
+                    <BSTable>
+                        <BS_thead>
+                            <BS_tr>
+                                <BS_th scope="col">FLIGHT NR</BS_th>
+                                <BS_th scope="col">DESTINATION</BS_th>
+                                <BS_th scope="col">TIME</BS_th>
+                            </BS_tr>
+                        </BS_thead>
+                        <BS_tbody>
+                            @foreach (var record in ApiService.RecentResponse.LastResponse)
+                            {
+                                @if (record.type == "departure")
+                                {
+                                    <BS_tr>
+                                        <BS_td>@record.flight.iataNumber</BS_td>
+                                        <BS_td>@record.arrival.iataCode</BS_td>
+                                        <BS_td>@record.arrival.scheduledTime.ToLocalTime()</BS_td>
+                                    </BS_tr>
+                                }
+                            }
+                        </BS_tbody>
+                    </BSTable>
+                </BSTabContent>
+        </BSTab>
+    </BSTabList>
+    <BSTabSelectedContent/>
+</BSTabGroup>
