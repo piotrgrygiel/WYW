@@ -4,9 +4,9 @@ namespace WYW.Data
 {
     public class RealDateTime : IDateTime
     {
-        public DateTime Now()
+        public DateTimeOffset UtcNow()
         {
-            return DateTime.Now;
+            return DateTimeOffset.UtcNow;
         }
     }
 }
