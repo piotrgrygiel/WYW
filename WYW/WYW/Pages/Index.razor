@@ -85,26 +85,43 @@
                         <BS_tbody>
                             @foreach (var record in flightInfos)
                             {
-                                @if (record.FlightInfo.type == "arrival")
+                            @if (record.FlightInfo.type == "arrival")
                                 {
-                                    <BS_tr>
-                                        <BS_td>
-                                            <BSButton Color="Color.Primary" @onclick=@GetFlightDetailsIMainTab>Dodaj</BSButton>
-                                        </BS_td>
-                                        <BS_td >
-                                            
-                                            <BSButton Color="Color.Primary" @onclick="() => ExpandFlight(record)">@record.FlightInfo.flight.iataNumber</BSButton>
-                                            @*
-                                                <BSCollapse IsOpen="@record.IsOpen">
-                                                    <BSCard CardType="CardType.Card">
-                                                    <BSCard CardType="CardType.Text">Flight details</BSCard>
-                                                    </BSCard>
-                                                </BSCollapse>
-                                            *@
-                                            @record.FlightInfo.flight.iataNumber
-                                        </BS_td>
-                                        <BS_td>@($"{record.TimeToArrival:h\\:mm}")</BS_td>
-                                    </BS_tr>
+                            <BS_tr>
+                                <BS_td>
+                                    <BSButton Color="Color.Primary" @onclick=@GetFlightDetailsIMainTab>Dodaj</BSButton>
+                                </BS_td>
+                                <BS_td>
+
+                                    <BSButton Color="Color.Primary" @onclick="() => ExpandFlight(record)">@record.FlightInfo.flight.iataNumber</BSButton>
+                                </BS_td>
+                                <BS_td>@($"{record.TimeToArrival:h\\:mm}")</BS_td>
+                            </BS_tr>
+                            <BSCollapse IsOpen="@record.IsOpen">
+                                <BS_tr>
+                                    <BSCard CardType="CardType.Card">
+                                        <BSCard CardType="CardType.Text">Flight details</BSCard>
+                                        <BSTable>
+                                            <BS_thead>
+                                                <BS_tr>
+                                                    <BS_th scope="col">FLIGHT STATUS / ACTION</BS_th>
+                                                    <BS_th scope="col">DEPARTURE TIME</BS_th>
+                                                    <BS_th scope="col">TERMINAL</BS_th>
+                                                    <BS_th scope="col">GATE</BS_th>
+                                                </BS_tr>
+                                            </BS_thead>
+                                            <BS_tbody>
+                                                <BS_tr>
+                                                    <BS_td>@record.FlightInfo.status</BS_td>
+                                                    <BS_td>@TimeZoneService.GetLocalDateTime(record.FlightInfo.departure.scheduledTime)</BS_td>
+                                                    <BS_td>@record.FlightInfo.departure.terminal</BS_td>
+                                                    <BS_td>@record.FlightInfo.departure.gate</BS_td>
+                                                </BS_tr>
+                                            </BS_tbody>
+                                        </BSTable>
+                                    </BSCard>
+                                </BS_tr>
+                            </BSCollapse>
                                 }
                             }
                         </BS_tbody>
