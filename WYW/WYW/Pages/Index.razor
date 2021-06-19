@@ -90,20 +90,20 @@ else
             <tr>
                 <td><b>FLIGHT NR</b></td>
                 <td><b>DESTINATION</b></td>
-                <td><b>TIME</b></td>
+                <td><b>TIME TO DEPARTURE</b></td>
                 <td><b>TYPE</b></td>
             </tr>
 
-            @foreach (var record in ApiService.RecentResponse.LastResponse)
+            @foreach (var record in flightInfos)
             {
-                @if (record.type == "arrival")
+                @if (record.FlightInfo.type == "arrival")
                 {
-            <tr>
-                <td>@record.flight.iataNumber</td>
-                <td>@record.arrival.iataCode</td>
-                <td>@record.arrival.scheduledTime.ToLocalTime()</td>
-                <td>@record.type</td>
-            </tr>
+                    <tr>
+                        <td>@record.FlightInfo.flight.iataNumber</td>
+                        <td>@record.FlightInfo.arrival.iataCode</td>
+                        <td>@($"{record.TimeToDeparture:h\\:mm\\:ss}")</td>
+                        <td>@record.FlightInfo.type</td>
+                    </tr>
                 }
             }
         </tbody>
@@ -114,19 +114,19 @@ else
             <tr>
                 <td><b>FLIGHT NR</b></td>
                 <td><b>DESTINATION</b></td>
-                <td><b>TIME</b></td>
+                <td><b>TIME TO DEPARTURE</b></td>
                 <td><b>TYPE</b></td>
             </tr>
 
-            @foreach (var record in ApiService.RecentResponse.LastResponse)
+            @foreach (var record in flightInfos)
             {
-                @if (record.type == "departure")
+                @if (record.FlightInfo.type == "departure")
                 {
             <tr>
-                <td>@record.flight.iataNumber</td>
-                <td>@record.arrival.iataCode</td>
-                <td>@record.departure.scheduledTime.ToLocalTime()</td>
-                <td>@record.type</td>
+                <td>@record.FlightInfo.flight.iataNumber</td>
+                <td>@record.FlightInfo.arrival.iataCode</td>
+                <td>@($"{record.TimeToDeparture:h\\:mm\\:ss}")</td>
+                <td>@record.FlightInfo.type</td>
             </tr>
                 }
             }
