@@ -77,8 +77,8 @@
                     <BSTable>
                         <BS_thead>
                             <BS_tr>
+                                <BS_th scope="col">DODAJ</BS_th>
                                 <BS_th scope="col">NUMER LOTU</BS_th>
-                                <BS_th scope="col">LOT Z</BS_th>
                                 <BS_th scope="col">CZAS DO PRZYLOTU</BS_th>
                             </BS_tr>
                         </BS_thead>
@@ -88,8 +88,21 @@
                                 @if (record.FlightInfo.type == "arrival")
                                 {
                                     <BS_tr>
-                                        <BS_td>@record.FlightInfo.flight.iataNumber</BS_td>
-                                        <BS_td>@record.FlightInfo.arrival.iataCode</BS_td>
+                                        <BS_td>
+                                            <BSButton Color="Color.Primary" @onclick=@GetFlightDetailsIMainTab>Dodaj</BSButton>
+                                        </BS_td>
+                                        <BS_td >
+                                            
+                                            <BSButton Color="Color.Primary" @onclick="() => ExpandFlight(record)">@record.FlightInfo.flight.iataNumber</BSButton>
+                                            @*
+                                                <BSCollapse IsOpen="@record.IsOpen">
+                                                    <BSCard CardType="CardType.Card">
+                                                    <BSCard CardType="CardType.Text">Flight details</BSCard>
+                                                    </BSCard>
+                                                </BSCollapse>
+                                            *@
+                                            @record.FlightInfo.flight.iataNumber
+                                        </BS_td>
                                         <BS_td>@($"{record.TimeToArrival:h\\:mm}")</BS_td>
                                     </BS_tr>
                                 }
@@ -104,6 +117,7 @@
                     <BSTable>
                         <BS_thead>
                             <BS_tr>
+                                <BS_th scope="col">DODAJ</BS_th>
                                 <BS_th scope="col">NUMER LOTU</BS_th>
                                 <BS_th scope="col">LOT DO</BS_th>
                                 <BS_th scope="col">CZAS DO ODLOTU</BS_th>
@@ -115,6 +129,9 @@
                                 @if (record.FlightInfo.type == "departure")
                                 {
                                     <BS_tr>
+                                        <BS_td>
+                                            <BSButton Color="Color.Primary">Dodaj</BSButton>
+                                        </BS_td>
                                         <BS_td>@record.FlightInfo.flight.iataNumber</BS_td>
                                         <BS_td>@record.FlightInfo.arrival.iataCode</BS_td>
                                         <BS_td>@($"{record.TimeToDeparture:h\\:mm}")</BS_td>

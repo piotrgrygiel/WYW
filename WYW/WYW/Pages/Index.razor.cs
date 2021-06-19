@@ -7,6 +7,7 @@ using System.Threading;
 using BlazorStrap;
 using System.Threading.Tasks;
 using WYW.Data;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace WYW.Pages
 {
@@ -42,6 +43,10 @@ namespace WYW.Pages
             }
         }
 
+        private void GetFlightDetailsIMainTab()
+        {
+            
+        }
         private void HandleValidSubmit()
         {
             Logger.LogInformation("HandleValidSubmit called");
@@ -102,6 +107,12 @@ namespace WYW.Pages
         private void Hidden (BSTabEvent e)
         {
             Console.WriteLine($"Hidden -> Activated: {e.Activated?.Id.ToString()} , Deactivated: {e.Deactivated?.Id.ToString()}");
+        }
+
+        private void ExpandFlight(ExtendedFlightInfo flight)
+        {
+            flight.IsOpen = !flight.IsOpen;
+            StateHasChanged();
         }
     }
 }
