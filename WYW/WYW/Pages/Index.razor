@@ -85,19 +85,6 @@
                         </HeaderTemplate>
                         <ItemTemplate>
                             @if (record.FlightInfo.type == "arrival")
-<<<<<<< Updated upstream
-                                {
-                            <BS_tr>
-                                <BS_td>
-                                    <BSButton Color="Color.Primary" @onclick=@GetFlightDetailsIMainTab>Dodaj</BSButton>
-                                </BS_td>
-                                <BS_td>
-
-                                    <BSButton Color="Color.Primary" @onclick="() => ExpandFlight(record)">@record.FlightInfo.flight.iataNumber</BSButton>
-                                </BS_td>
-                                <BS_td>@($"{record.TimeToArrival:h\\:mm}")</BS_td>
-                            </BS_tr>
-=======
                             {
                                     <td>
                                         <BSButton Color="Color.Primary" @onclick=@GetFlightDetailsIMainTab>Dodaj</BSButton>
@@ -106,7 +93,6 @@
                                         <BSButton Color="Color.Primary" @onclick="() => ExpandFlight(record)">@record.iataNumber</BSButton>
                                     </td>
                                     <td>@($"{record.TimeToArrival:h\\:mm}")</td>
->>>>>>> Stashed changes
                             <BSCollapse IsOpen="@record.IsOpen">
                                 <BS_tr>
                                     <BSCard CardType="CardType.Card">
@@ -142,7 +128,6 @@
                 <BSTabContent>
                     <BSDataTable Items="flightInfos" Context="record" IsResponsive="true" IsStriped="true" @ref="SortableRef">
                         <HeaderTemplate>
-<<<<<<< Updated upstream
                             <tr>
 
                                 <th scope="col">DODAJ</th>
@@ -150,33 +135,16 @@
                                 <th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataCode"))" @onclick:preventDefault>LOT DO</a></th>
                                 <th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("TimeToDeparture"))" @onclick:preventDefault>CZAS DO ODLOTU</a></th>
                             </tr>
-=======
-                            <BS_tr>
-                                <BS_th scope="col">DODAJ</BS_th>
-                                <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataNumber"))" @onclick:preventDefault>NUMER LOTU</a></BS_th>
-                                <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataCode"))" @onclick:preventDefault>LOT DO</a></BS_th>
-                                <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("TimeToDeparture"))" @onclick:preventDefault>CZAS DO ODLOTU</a></BS_th>
-                            </BS_tr>
->>>>>>> Stashed changes
-                        </HeaderTemplate>
+                            </HeaderTemplate>
                         <ItemTemplate>
                             @if (record.FlightInfo.type == "departure")
                             {
-<<<<<<< Updated upstream
-                                <BS_td>
-                                    <BSButton Color="Color.Primary">Dodaj</BSButton>
-                                </BS_td>
-                                <td>@record.iataNumber</td>
-                                <td>@record.iataCode</td>
-                                <td>@($"{record.TimeToDeparture:h\\:mm}")</td>
-=======
                                     <BS_td>
                                         <BSButton Color="Color.Primary">Dodaj</BSButton>
                                     </BS_td>
                                     <BS_td>@record.iataNumber</BS_td>
                                     <BS_td>@record.iataCode</BS_td>
                                     <BS_td>@($"{record.TimeToDeparture:h\\:mm}")</BS_td>
->>>>>>> Stashed changes
                             }
                         </ItemTemplate>
                     </BSDataTable>
