@@ -78,31 +78,21 @@
                     <BSDataTable Items="flightInfos" Context="record" IsResponsive="true" IsStriped="true" @ref="SortableRef">
                         <HeaderTemplate>
                             <tr>
+                                <th scope="col">DODAJ</th>
                                 <th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataNumber"))" @onclick:preventDefault>NUMER LOTU</a></th>
-                                <th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataCode"))" @onclick:preventDefault>LOT DO</a></th>
                                 <th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("TimeToArrival"))" @onclick:preventDefault>CZAS DO ODLOTU</a></th>
                             </tr>
                         </HeaderTemplate>
                         <ItemTemplate>
                             @if (record.FlightInfo.type == "arrival")
                             {
-                                }
-                                        <BS_td>
-                                            <BSButton Color="Color.Primary" @onclick=@GetFlightDetailsIMainTab>Dodaj</BSButton>
-                                        </BS_td>
-                                        <BS_td >
-                                            
-                                            <BSButton Color="Color.Primary" @onclick="() => ExpandFlight(record)">@record.iataNumber</BSButton>
-                                            @*
-                                                <BSCollapse IsOpen="@record.IsOpen">
-                                                    <BSCard CardType="CardType.Card">
-                                                    <BSCard CardType="CardType.Text">Flight details</BSCard>
-                                                    </BSCard>
-                                                </BSCollapse>
-                                            *@
-                                            @record.FlightInfo.iataNumber
-                                        </BS_td>
-                                        <BS_td>@($"{record.TimeToArrival:h\\:mm}")</BS_td>
+                                <BS_td>
+                                    <BSButton Color="Color.Primary" @onclick=@GetFlightDetailsIMainTab>Dodaj</BSButton>
+                                </BS_td>
+                                <BS_td >
+                                    <BSButton Color="Color.Primary" @onclick="() => ExpandFlight(record)">@record.iataNumber</BSButton>
+                                </BS_td>
+                                <BS_td>@($"{record.TimeToArrival:h\\:mm}")</BS_td>
                             }
                         </ItemTemplate>
                     </BSDataTable>
