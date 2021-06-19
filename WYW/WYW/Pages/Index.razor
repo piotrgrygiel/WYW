@@ -18,20 +18,20 @@
                     <BSTable>
                         <BS_thead>
                             <BS_tr>
-                                <BS_th scope="col">FLIGHT NR</BS_th>
-                                <BS_th scope="col">DESTINATION</BS_th>
-                                <BS_th scope="col">TIME</BS_th>
+                                <BS_th scope="col">NUMER LOTU</BS_th>
+                                <BS_th scope="col">LOT Z</BS_th>
+                                <BS_th scope="col">CZAS DO PRZYLOTU</BS_th>
                             </BS_tr>
                         </BS_thead>
                         <BS_tbody>
-                            @foreach (var record in ApiService.RecentResponse.LastResponse)
+                            @foreach (var record in flightInfos)
                             {
-                                @if (record.type == "arrival")
+                                @if (record.FlightInfo.type == "arrival")
                                 {
                                     <BS_tr>
-                                        <BS_td>@record.flight.iataNumber</BS_td>
-                                        <BS_td>@record.arrival.iataCode</BS_td>
-                                        <BS_td>@record.arrival.scheduledTime.ToLocalTime()</BS_td>
+                                        <BS_td>@record.FlightInfo.flight.iataNumber</BS_td>
+                                        <BS_td>@record.FlightInfo.arrival.iataCode</BS_td>
+                                        <BS_td>@($"{record.TimeToArrival:h\\:mm}")</BS_td>
                                     </BS_tr>
                                 }
                             }
@@ -45,20 +45,20 @@
                     <BSTable>
                         <BS_thead>
                             <BS_tr>
-                                <BS_th scope="col">FLIGHT NR</BS_th>
-                                <BS_th scope="col">DESTINATION</BS_th>
-                                <BS_th scope="col">TIME</BS_th>
+                                <BS_th scope="col">NUMER LOTU</BS_th>
+                                <BS_th scope="col">LOT DO</BS_th>
+                                <BS_th scope="col">CZAS DO ODLOTU</BS_th>
                             </BS_tr>
                         </BS_thead>
                         <BS_tbody>
-                            @foreach (var record in ApiService.RecentResponse.LastResponse)
+                            @foreach (var record in flightInfos)
                             {
-                                @if (record.type == "departure")
+                                @if (record.FlightInfo.type == "departure")
                                 {
                                     <BS_tr>
-                                        <BS_td>@record.flight.iataNumber</BS_td>
-                                        <BS_td>@record.arrival.iataCode</BS_td>
-                                        <BS_td>@record.arrival.scheduledTime.ToLocalTime()</BS_td>
+                                        <BS_td>@record.FlightInfo.flight.iataNumber</BS_td>
+                                        <BS_td>@record.FlightInfo.arrival.iataCode</BS_td>
+                                        <BS_td>@($"{record.TimeToDeparture:h\\:mm}")</BS_td>
                                     </BS_tr>
                                 }
                             }
