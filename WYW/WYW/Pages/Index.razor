@@ -90,7 +90,7 @@ else
             <tr>
                 <td><b>FLIGHT NR</b></td>
                 <td><b>DESTINATION</b></td>
-                <td><b>TIME TO DEPARTURE</b></td>
+                <td><b>TIME TO ARRIVAL</b></td>
                 <td><b>TYPE</b></td>
             </tr>
 
@@ -101,7 +101,7 @@ else
                     <tr>
                         <td>@record.FlightInfo.flight.iataNumber</td>
                         <td>@record.FlightInfo.arrival.iataCode</td>
-                        <td>@($"{record.TimeToDeparture:h\\:mm\\:ss}")</td>
+                        <td>@($"{record.TimeToArrival:h\\:mm}")</td>
                         <td>@record.FlightInfo.type</td>
                     </tr>
                 }
@@ -125,7 +125,7 @@ else
             <tr>
                 <td>@record.FlightInfo.flight.iataNumber</td>
                 <td>@record.FlightInfo.arrival.iataCode</td>
-                <td>@($"{record.TimeToDeparture:h\\:mm\\:ss}")</td>
+                <td>@($"{record.TimeToDeparture:h\\:mm}")</td>
                 <td>@record.FlightInfo.type</td>
             </tr>
                 }

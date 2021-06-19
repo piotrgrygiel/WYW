@@ -5,16 +5,16 @@ namespace WYW.Data
 {
     public class MockDateTime : IDateTime
     {
-        private DateTime StartTime { get; set; }
+        private DateTimeOffset StartTime { get; set; }
         private Stopwatch Timer { get; set; }
 
         public void ResetTime(DateTime newTime)
         {
-            StartTime = newTime;
+            StartTime = new DateTimeOffset(newTime);
             Timer = Stopwatch.StartNew();
         }
 
-        public DateTime Now()
+        public DateTimeOffset UtcNow()
         {
             return StartTime + Timer.Elapsed;
         }

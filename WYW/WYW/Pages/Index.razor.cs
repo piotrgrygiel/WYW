@@ -37,7 +37,7 @@ namespace WYW.Pages
 
             if (timer == null)
             {
-                timer = new Timer(async (e) => { await UpdateTimeToDeparture(); }, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
+                timer = new Timer(async (e) => { await UpdateTimeSpans(); }, null, TimeSpan.Zero, TimeSpan.FromSeconds(60));
             }
         }
 
@@ -50,15 +50,31 @@ namespace WYW.Pages
             flightInfo = ApiService.RecentResponse.LastResponse.FirstOrDefault(flight => flight.flight.number.Equals(inputfdModel.GetNumber(), StringComparison.InvariantCultureIgnoreCase));
         }
 
-        private async Task UpdateTimeToDeparture()
+        private async Task UpdateTimeSpans()
         {
-            var now = await TimeZoneService.GetLocalDateTime(DateTimeOffset.UtcNow);
+            var now = await TimeZoneService.GetLocalDateTime(DateTimeService.UtcNow());
 
             foreach (var fi in flightInfos)
             {
-                var departureTime = fi == null ? now : fi.FlightInfo.departure.scheduledTime;
+                bool arrival = fi.FlightInfo.type == "arrival";
+                var timeSchedulled = arrival ? fi.FlightInfo.arrival.scheduledTime : fi.FlightInfo.departure.scheduledTime;
+                var timeSchedulledValidated = fi == null ? now : timeSchedulled;
+                var timeTo = timeSchedulledValidated - now + now.Offset;
 
-                fi.TimeToDeparture = departureTime - now + now.Offset;
+                if (arrival)
+                {
+                    if (timeTo < TimeSpan.Zero)
+                        fi.TimeToArrival = TimeSpan.Zero;
+                    else
+                        fi.TimeToArrival = timeTo;
+                }
+                else
+                {
+                    if (timeTo < TimeSpan.Zero)
+                        fi.TimeToDeparture = TimeSpan.Zero;
+                    else
+                        fi.TimeToDeparture = timeTo;
+                }
             }
             
             await InvokeAsync(StateHasChanged);
