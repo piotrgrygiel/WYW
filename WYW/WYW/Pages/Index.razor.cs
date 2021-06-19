@@ -7,7 +7,6 @@ using System.Threading;
 using BlazorStrap;
 using System.Threading.Tasks;
 using WYW.Data;
-using Microsoft.AspNetCore.Components.Web;
 
 namespace WYW.Pages
 {
@@ -25,7 +24,7 @@ namespace WYW.Pages
         [Inject]
         private UserTimeZoneService TimeZoneService { get; set; }
 
-        private FlightInfo flightInfo = null;
+        private ExtendedFlightInfo chosenFlightInfo = null;
         private bool userFilledFlightNumber = false;
         private InputModel inputfdModel = new InputModel();
         private Timer timer = null;
@@ -43,18 +42,21 @@ namespace WYW.Pages
             }
         }
 
-        private void GetFlightDetailsIMainTab()
+        private async Task GetFlightDetailsIMainTab(ExtendedFlightInfo flight)
         {
-            
+            chosenFlightInfo = flight;
+            await UpdateTimeSpans();
+            await InvokeAsync(StateHasChanged);
         }
-        private void HandleValidSubmit()
-        {
-            Logger.LogInformation("HandleValidSubmit called");
 
-            userFilledFlightNumber = true;
+        //private void HandleValidSubmit()
+        //{
+        //    Logger.LogInformation("HandleValidSubmit called");
 
-            flightInfo = ApiService.RecentResponse.LastResponse.FirstOrDefault(flight => flight.flight.number.Equals(inputfdModel.GetNumber(), StringComparison.InvariantCultureIgnoreCase));
-        }
+        //    userFilledFlightNumber = true;
+
+        //    chosenFlightInfo = ApiService.RecentResponse.LastResponse.FirstOrDefault(flight => flight.flight.number.Equals(inputfdModel.GetNumber(), StringComparison.InvariantCultureIgnoreCase));
+        //}
 
         private async Task UpdateTimeSpans()
         {
@@ -62,28 +64,38 @@ namespace WYW.Pages
 
             foreach (var fi in flightInfos)
             {
-                bool arrival = fi.FlightInfo.type == "arrival";
-                var timeSchedulled = arrival ? fi.FlightInfo.arrival.scheduledTime : fi.FlightInfo.departure.scheduledTime;
-                var timeSchedulledValidated = fi == null ? now : timeSchedulled;
-                var timeTo = timeSchedulledValidated - now + now.Offset;
-
-                if (arrival)
-                {
-                    if (timeTo < TimeSpan.Zero)
-                        fi.TimeToArrival = TimeSpan.Zero;
-                    else
-                        fi.TimeToArrival = timeTo;
-                }
-                else
-                {
-                    if (timeTo < TimeSpan.Zero)
-                        fi.TimeToDeparture = TimeSpan.Zero;
-                    else
-                        fi.TimeToDeparture = timeTo;
-                }
+                UpdateTimeFor(fi, now);
             }
+
+            UpdateTimeFor(chosenFlightInfo, now);
             
             await InvokeAsync(StateHasChanged);
+        }
+
+        private void UpdateTimeFor(ExtendedFlightInfo fi, DateTimeOffset now)
+        {
+            if (fi == null)
+                return;
+
+            bool arrival = fi.FlightInfo.type == "arrival";
+            var timeSchedulled = arrival ? fi.FlightInfo.arrival.scheduledTime : fi.FlightInfo.departure.scheduledTime;
+            var timeSchedulledValidated = fi == null ? now : timeSchedulled;
+            var timeTo = timeSchedulledValidated - now + now.Offset;
+
+            if (arrival)
+            {
+                if (timeTo < TimeSpan.Zero)
+                    fi.TimeToArrival = TimeSpan.Zero;
+                else
+                    fi.TimeToArrival = timeTo;
+            }
+            else
+            {
+                if (timeTo < TimeSpan.Zero)
+                    fi.TimeToDeparture = TimeSpan.Zero;
+                else
+                    fi.TimeToDeparture = timeTo;
+            }
         }
 
         public void Dispose()
