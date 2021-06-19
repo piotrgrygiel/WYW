@@ -4,6 +4,6 @@ namespace WYW.Data
 {
     public interface IDateTime
     {
-        DateTime Now();
+        DateTimeOffset UtcNow();
     }
 }
