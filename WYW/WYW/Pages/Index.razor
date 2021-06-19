@@ -9,7 +9,66 @@
         <BSTab>
             <BSTabLabel>Moje Loty</BSTabLabel>
             <BSTabContent>
-             Moje Loty            
+                <div class="card m-3">
+                    <h2 class="card-header"> Enter Your Flight Number: </h2> 
+                        <div class="card-body">
+                            <EditForm Model="@inputfdModel" OnValidSubmit="@HandleValidSubmit">
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <DataAnnotationsValidator />
+                                    <ValidationSummary />
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <InputSelect id="flightno" @bind-Value="inputfdModel.Name" class="form-control">
+                                    @foreach (var value in ApiService.RecentResponse.LastResponse)
+                                    {
+                                        <option value=@value.flight.iataNumber>@value.flight.iataNumber</option>
+                                    }
+                                    </InputSelect>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <button class="btn btn-primary" type="submit" @onclick="HandleValidSubmit">Check</button>
+                                </div>
+                                <div class="form-group col">
+                                    <button class="btn btn-primary" type="submit">Subscribe</button>
+                                </div>
+                            </div>
+                            </EditForm>
+                        </div>
+                    </div>
+                    <br>
+                        @if (!userFilledFlightNumber)
+                        {
+                        }
+                        else if (flightInfo != null)
+                        {
+                            <BSTable>
+                                <BS_thead>
+                                    <BS_tr>
+                                        <BS_th scope="col">FLIGHT STATUS / ACTION</BS_th>
+                                        <BS_th scope="col">DEPARTURE TIME</BS_th>
+                                        <BS_th scope="col">TERMINAL</BS_th>
+                                        <BS_th scope="col">GATE</BS_th>
+                                    </BS_tr>
+                                </BS_thead>
+                                <BS_tbody>
+                                    <BS_tr>
+                                        <BS_td>@flightInfo.status</BS_td>
+                                        <BS_td>@flightInfo.departure.scheduledTime.ToLocalTime()</BS_td>
+                                        <BS_td>@flightInfo.departure.terminal</BS_td>
+                                        <BS_td>@flightInfo.departure.gate</BS_td>
+                                    </BS_tr>
+                                </BS_tbody>
+                            </BSTable>
+                        }
+                        else
+                        {
+                            <p>Flight not found</p>
+                        }
             </BSTabContent>
         </BSTab>
         <BSTab>
