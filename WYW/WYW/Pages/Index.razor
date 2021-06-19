@@ -3,6 +3,7 @@
 @using WYW.Data
 @inject IJSRuntime JSRuntime;
 @using BlazorStrap;
+@using BlazorStrap.Extensions.BSDataTable;
 
 <BSTabGroup ShowEvent="@Show" HiddenEvent="@Hidden" HideEvent="@Hide" ShownEvent="@Shown">
     <BSTabList>
@@ -74,55 +75,39 @@
         <BSTab>
             <BSTabLabel>Przyloty</BSTabLabel>
                 <BSTabContent>
-                    <BSTable>
-                        <BS_thead>
-                            <BS_tr>
-                                <BS_th scope="col">NUMER LOTU</BS_th>
-                                <BS_th scope="col">LOT Z</BS_th>
-                                <BS_th scope="col">CZAS DO PRZYLOTU</BS_th>
-                            </BS_tr>
-                        </BS_thead>
-                        <BS_tbody>
-                            @foreach (var record in flightInfos)
-                            {
-                                @if (record.FlightInfo.type == "arrival")
-                                {
-                                    <BS_tr>
-                                        <BS_td>@record.FlightInfo.flight.iataNumber</BS_td>
-                                        <BS_td>@record.FlightInfo.arrival.iataCode</BS_td>
-                                        <BS_td>@($"{record.TimeToArrival:h\\:mm}")</BS_td>
-                                    </BS_tr>
-                                }
-                            }
-                        </BS_tbody>
-                    </BSTable>
+                    <BSDataTable Items="arrivalFlights" Context="sample" IsResponsive="true" IsStriped="true" @ref="SortableRef">
+                        <HeaderTemplate>
+                            <tr>
+                                <th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataNumber"))" @onclick:preventDefault>NUMER LOTU</a></th>
+                                <th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataCode"))" @onclick:preventDefault>LOT DO</a></th>
+                                <th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("TimeTo"))" @onclick:preventDefault>CZAS DO ODLOTU</a></th>
+                            </tr>
+                        </HeaderTemplate>
+                        <ItemTemplate>
+                            <td>@sample.iataNumber</td>
+                            <td>@sample.iataCode</td>
+                            <td>@sample.TimeTo</td>
+                        </ItemTemplate>
+                    </BSDataTable>
                 </BSTabContent>
             </BSTab>
             <BSTab>
                 <BSTabLabel>Odloty</BSTabLabel>
                 <BSTabContent>
-                    <BSTable>
-                        <BS_thead>
-                            <BS_tr>
-                                <BS_th scope="col">NUMER LOTU</BS_th>
-                                <BS_th scope="col">LOT DO</BS_th>
-                                <BS_th scope="col">CZAS DO ODLOTU</BS_th>
-                            </BS_tr>
-                        </BS_thead>
-                        <BS_tbody>
-                            @foreach (var record in flightInfos)
-                            {
-                                @if (record.FlightInfo.type == "departure")
-                                {
-                                    <BS_tr>
-                                        <BS_td>@record.FlightInfo.flight.iataNumber</BS_td>
-                                        <BS_td>@record.FlightInfo.arrival.iataCode</BS_td>
-                                        <BS_td>@($"{record.TimeToDeparture:h\\:mm}")</BS_td>
-                                    </BS_tr>
-                                }
-                            }
-                        </BS_tbody>
-                    </BSTable>
+                    <BSDataTable Items="departureFlights" Context="sample" IsResponsive="true" IsStriped="true" @ref="SortableRef">
+                        <HeaderTemplate>
+                            <tr>
+                                <th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataNumber"))" @onclick:preventDefault>NUMER LOTU</a></th>
+                                <th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataCode"))" @onclick:preventDefault>LOT DO</a></th>
+                                <th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("TimeTo"))" @onclick:preventDefault>CZAS DO ODLOTU</a></th>
+                            </tr>
+                        </HeaderTemplate>
+                        <ItemTemplate>
+                            <td>@sample.iataNumber</td>
+                            <td>@sample.iataCode</td>
+                            <td>@sample.TimeTo</td>
+                        </ItemTemplate>
+                    </BSDataTable>
                 </BSTabContent>
         </BSTab>
     </BSTabList>
