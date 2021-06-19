@@ -2,10 +2,73 @@
 @using Microsoft.Extensions.Logging
 @inject IJSRuntime JSRuntime;
 
+
+<BSTabGroup>
+    <BSTabList>
+        <BSTab>
+            <BSTabLabel>Moje Loty</BSTabLabel>
+            <BSTabContent>
+             Moje Loty            
+            </BSTabContent>
+        </BSTab>
+        <BSTab>
+            <BSTabLabel>Przyloty</BSTabLabel>
+                <BSTabContent>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td><b>FLIGHT NR</b></td>
+                                <td><b>DESTINATION</b></td>
+                                <td><b>TIME</b></td>
+                            </tr>
+
+                            @foreach (var record in ApiService.RecentResponse.LastResponse)
+                            {
+                                @if (record.type == "arrival")
+                                {
+                                    <tr>
+                                        <td>@record.flight.iataNumber</td>
+                                        <td>@record.arrival.iataCode</td>
+                                        <td>@record.arrival.scheduledTime.ToLocalTime()</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </BSTabContent>
+            </BSTab>
+            <BSTab>
+                <BSTabLabel>Odloty</BSTabLabel>
+                <BSTabContent>
+                    table class="table">
+                        <tbody>
+                            <tr>
+                                <td><b>FLIGHT NR</b></td>
+                                <td><b>DESTINATION</b></td>
+                                <td><b>TIME</b></td>
+                            </tr>
+
+                            @foreach (var record in ApiService.RecentResponse.LastResponse)
+                            {
+                                @if (record.type == "departure")
+                                {
+                                    <tr>
+                                        <td>@record.flight.iataNumber</td>
+                                        <td>@record.arrival.iataCode</td>
+                                        <td>@record.arrival.scheduledTime.ToLocalTime()</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                </BSTabContent>
+        </BSTab>
+    </BSTabList>
+</BSTabGroup>
+
+@*
 <div class="card m-3">
     <h2 class="card-header"> Enter Your Flight Number: </h2> 
         <div class="card-body">
-
             <EditForm Model="@inputfdModel" OnValidSubmit="@HandleValidSubmit">
                 <div class="form-row">
                     <div class="form-group col">
@@ -13,11 +76,7 @@
                         <ValidationSummary />
                     </div>
                 </div>
-                @*<div class="form-row">
-            <div class="form-group col">
-                <InputText id="flightno" @bind-Value="inputfdModel.Name" />
-            </div>
-        </div>*@
+            
                 <div class="form-row">
                     <div class="form-group col">
                         <InputSelect id="flightno" @bind-Value="inputfdModel.Name" class="form-control">
@@ -85,7 +144,7 @@ else
 }
 
 
-            <table class="table">
+    <table class="table">
         <tbody>
             <tr>
                 <td><b>FLIGHT NR</b></td>
@@ -133,4 +192,4 @@ else
         </tbody>
     </table>
 
-
+*@

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading;
+using BlazorStrap;
 using WYW.Data;
 
 namespace WYW.Pages
@@ -63,5 +64,23 @@ namespace WYW.Pages
             if (timer != null)
                 timer.Dispose();
         }
+
+    private void Show (BSTabEvent e)
+    {
+        Console.WriteLine($"Show   -> Activated: {e.Activated?.Id.ToString()} , Deactivated: {e.Deactivated?.Id.ToString()}");
+    }
+    private void Shown (BSTabEvent e)
+    {
+        Console.WriteLine($"Shown  -> Activated: {e.Activated?.Id.ToString()} , Deactivated: {e.Deactivated?.Id.ToString()}");
+    }
+    private void Hide (BSTabEvent e)
+    {
+        Console.WriteLine($"Hide   ->  Activated: {e.Activated?.Id.ToString()} , Deactivated: {e.Deactivated?.Id.ToString()}");
+    }
+    private void Hidden (BSTabEvent e)
+    {
+        Console.WriteLine($"Hidden -> Activated: {e.Activated?.Id.ToString()} , Deactivated: {e.Deactivated?.Id.ToString()}");
+    }
+
     }
 }
