@@ -11,64 +11,33 @@
             <BSTabLabel>Moje Loty</BSTabLabel>
             <BSTabContent>
                 <div class="card m-3">
-                    <h2 class="card-header"> Enter Your Flight Number: </h2> 
-                        <div class="card-body">
-                            <EditForm Model="@inputfdModel" OnValidSubmit="@HandleValidSubmit">
-                            <div class="form-row">
-                                <div class="form-group col">
-                                    <DataAnnotationsValidator />
-                                    <ValidationSummary />
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col">
-                                    <InputSelect id="flightno" @bind-Value="inputfdModel.Name" class="form-control">
-                                    @foreach (var value in ApiService.RecentResponse.LastResponse)
-                                    {
-                                        <option value=@value.flight.iataNumber>@value.flight.iataNumber</option>
-                                    }
-                                    </InputSelect>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col">
-                                    <button class="btn btn-primary" type="submit" @onclick="HandleValidSubmit">Check</button>
-                                </div>
-                                <div class="form-group col">
-                                    <button class="btn btn-primary" type="submit">Subscribe</button>
-                                </div>
-                            </div>
-                            </EditForm>
-                        </div>
+                    <h2 class="card-header"> TWÓJ LOT: </h2> 
                     </div>
                     <br>
-                        @if (!userFilledFlightNumber)
-                        {
-                        }
-                        else if (flightInfo != null)
+                        @if (chosenFlightInfo != null)
                         {
                             <BSTable>
                                 <BS_thead>
                                     <BS_tr>
-                                        <BS_th scope="col">FLIGHT STATUS / ACTION</BS_th>
-                                        <BS_th scope="col">DEPARTURE TIME</BS_th>
+                                        <BS_th scope="col">STATUS LOTU</BS_th>
+                                        <BS_th scope="col">CZAS DO ODLOTU</BS_th>
                                         <BS_th scope="col">TERMINAL</BS_th>
-                                        <BS_th scope="col">GATE</BS_th>
+                                        <BS_th scope="col">BRAMKA</BS_th>
                                     </BS_tr>
                                 </BS_thead>
                                 <BS_tbody>
                                     <BS_tr>
-                                        <BS_td>@flightInfo.status</BS_td>
-                                        <BS_td>@flightInfo.departure.scheduledTime.ToLocalTime()</BS_td>
-                                        <BS_td>@flightInfo.departure.terminal</BS_td>
-                                        <BS_td>@flightInfo.departure.gate</BS_td>
+                                        <BS_td>@chosenFlightInfo.FlightInfo.status</BS_td>
+                                        <BS_td>@($"{chosenFlightInfo.TimeToDeparture:h\\:mm}")</BS_td>
+                                        <BS_td>@chosenFlightInfo.FlightInfo.departure.terminal</BS_td>
+                                        <BS_td>@chosenFlightInfo.FlightInfo.departure.gate</BS_td>
                                     </BS_tr>
                                 </BS_tbody>
                             </BSTable>
                         }
                         else
                         {
-                            <p>Flight not found</p>
+                            <p>Wybierz lot z zakładki odloty</p>
                         }
             </BSTabContent>
         </BSTab>
@@ -101,7 +70,7 @@
                                             <BS_thead>
                                                 <BS_tr>
                                                     <BS_th scope="col">FLIGHT STATUS / ACTION</BS_th>
-                                                    <BS_th scope="col">DEPARTURE TIME</BS_th>
+                                                    <BS_th scope="col">ARRIVAL TIME</BS_th>
                                                     <BS_th scope="col">TERMINAL</BS_th>
                                                     <BS_th scope="col">GATE</BS_th>
                                                 </BS_tr>
@@ -109,9 +78,9 @@
                                             <BS_tbody>
                                                 <BS_tr>
                                                     <BS_td>@record.FlightInfo.status</BS_td>
-                                                    <BS_td>@TimeZoneService.GetLocalDateTime(record.FlightInfo.departure.scheduledTime)</BS_td>
-                                                    <BS_td>@record.FlightInfo.departure.terminal</BS_td>
-                                                    <BS_td>@record.FlightInfo.departure.gate</BS_td>
+                                                    <BS_td>@TimeZoneService.GetLocalDateTime(record.FlightInfo.arrival.scheduledTime)</BS_td>
+                                                    <BS_td>@record.FlightInfo.arrival.terminal</BS_td>
+                                                    <BS_td>@record.FlightInfo.arrival.gate</BS_td>
                                                 </BS_tr>
                                             </BS_tbody>
                                         </BSTable>
@@ -138,13 +107,41 @@
                             </HeaderTemplate>
                         <ItemTemplate>
                             @if (record.FlightInfo.type == "departure")
-                            {
-                                    <BS_td>
-                                        <BSButton Color="Color.Primary">Dodaj</BSButton>
-                                    </BS_td>
-                                    <BS_td>@record.iataNumber</BS_td>
-                                    <BS_td>@record.iataCode</BS_td>
-                                    <BS_td>@($"{record.TimeToDeparture:h\\:mm}")</BS_td>
+                                {
+                                <BS_td>
+                                    <BSButton Color="Color.Primary" @onclick="() => GetFlightDetailsIMainTab(record)">Dodaj</BSButton>
+                                </BS_td>
+                                <BS_td>
+                                    <BSButton Color="Color.Primary" @onclick="() => ExpandFlight(record)">@record.iataNumber</BSButton>
+                                </BS_td>
+                                <BS_td>@record.iataCode</BS_td>
+                                <BS_td>@($"{record.TimeToDeparture:h\\:mm}")</BS_td>
+                            <BSCollapse IsOpen="@record.IsOpen">
+                                <BS_tr>
+                                    <BSCard CardType="CardType.Card">
+                                        <BSCard CardType="CardType.Text">Flight details</BSCard>
+                                        <BSTable>
+                                            <BS_thead>
+                                                <BS_tr>
+                                                    <BS_th scope="col">FLIGHT STATUS / ACTION</BS_th>
+                                                    <BS_th scope="col">DEPARTURE TIME</BS_th>
+                                                    <BS_th scope="col">TERMINAL</BS_th>
+                                                    <BS_th scope="col">GATE</BS_th>
+                                                </BS_tr>
+                                            </BS_thead>
+                                            <BS_tbody>
+                                                <BS_tr>
+                                                    <BS_td>@record.FlightInfo.status</BS_td>
+                                                    <BS_td>@TimeZoneService.GetLocalDateTime(record.FlightInfo.departure.scheduledTime)</BS_td>
+                                                    <BS_td>@record.FlightInfo.departure.terminal</BS_td>
+                                                    <BS_td>@record.FlightInfo.departure.gate</BS_td>
+                                                </BS_tr>
+                                            </BS_tbody>
+                                        </BSTable>
+                                    </BSCard>
+                                </BS_tr>
+                            </BSCollapse>
+                                }
                             }
                         </ItemTemplate>
                     </BSDataTable>
