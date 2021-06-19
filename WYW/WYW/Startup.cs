@@ -44,9 +44,23 @@ namespace WYW
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            ApiResponseService ApiService = new ApiResponseService();
-            Task.Run( () => ApiService.CheckTheApiEvery5m());
-            services.AddSingleton<ApiResponseService>(ApiService);
+#if PROD || DEBUG
+            ApiResponseService apiService = new ApiResponseService();
+            Task.Run( () => apiService.CheckTheApiEvery5m());
+
+            RealDateTime dateTime = new RealDateTime();
+#else
+            MockApiService apiService = new MockApiService();
+
+            MockDateTime dateTime = new MockDateTime();
+            dateTime.ResetTime(DateTime.Now);
+#endif
+
+            services.AddSingleton<IApiResponseService>(apiService);
+            services.AddSingleton<IDateTime>(dateTime);
+
+            services.AddScoped<UserTimeZoneService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -78,6 +92,13 @@ namespace WYW
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+
+            var serviceScopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
+            using (var serviceScope = serviceScopeFactory.CreateScope())
+            {
+                var dbContext = serviceScope.ServiceProvider.GetService<WywDbContext>();
+                dbContext.Database.EnsureCreated();
+            }
         }
     }
 }
