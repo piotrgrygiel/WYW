@@ -30,10 +30,7 @@ namespace WYW.Pages
         private InputModel inputfdModel = new InputModel();
         private Timer timer = null;
         private List<ExtendedFlightInfo> flightInfos;
-
-        public List<SimpleFlightInfo> departureFlights { get; set; }
-        public List<SimpleFlightInfo> arrivalFlights { get; set; }
-        private BSDataTable<SimpleFlightInfo> SortableRef { get; set; }
+        private BSDataTable<ExtendedFlightInfo> SortableRef { get; set; }
 
         protected override void OnInitialized()
         {
@@ -45,12 +42,6 @@ namespace WYW.Pages
             {
                 timer = new Timer(async (e) => { await UpdateTimeSpans(); }, null, TimeSpan.Zero, TimeSpan.FromSeconds(60));
             }
-
-            arrivalFlights = new List<SimpleFlightInfo>();
-            departureFlights = new List<SimpleFlightInfo>();
-
-            updateSimpleArrivals();
-            updateSimpleDepartures();
         }
 
         private void HandleValidSubmit()
@@ -88,9 +79,6 @@ namespace WYW.Pages
                         fi.TimeToDeparture = timeTo;
                 }
             }
-
-            updateSimpleArrivals();
-            updateSimpleDepartures();
             
             await InvokeAsync(StateHasChanged);
         }
@@ -116,41 +104,6 @@ namespace WYW.Pages
         private void Hidden (BSTabEvent e)
         {
             Console.WriteLine($"Hidden -> Activated: {e.Activated?.Id.ToString()} , Deactivated: {e.Deactivated?.Id.ToString()}");
-        }
-
-        private void updateSimpleArrivals()
-        {
-            arrivalFlights.Clear();
-
-            foreach (var record in flightInfos)
-            {
-                if (record.FlightInfo.type == "arrival")
-                {
-                    arrivalFlights.Add(new SimpleFlightInfo()
-                    {
-                        iataNumber = record.FlightInfo.flight.iataNumber,
-                        iataCode = record.FlightInfo.arrival.iataCode,
-                        TimeTo = ($"{record.TimeToArrival:h\\:mm}")
-                    });
-                }
-            }
-        }
-        private void updateSimpleDepartures()
-        {
-            departureFlights.Clear();
-
-            foreach (var record in flightInfos)
-            {
-                if (record.FlightInfo.type == "departure")
-                {
-                    departureFlights.Add(new SimpleFlightInfo()
-                    {
-                        iataNumber = record.FlightInfo.flight.iataNumber,
-                        iataCode = record.FlightInfo.arrival.iataCode,
-                        TimeTo = ($"{record.TimeToDeparture:h\\:mm}")
-                    });
-                }
-            }
         }
     }
 }
