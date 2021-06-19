@@ -86,12 +86,23 @@
                         <ItemTemplate>
                             @if (record.FlightInfo.type == "arrival")
                             {
-                                <BS_td>
-                                    <BSButton Color="Color.Primary">Dodaj</BSButton>
-                                </BS_td>
-                                <td>@record.iataNumber</td>
-                                <td>@record.iataCode</td>
-                                <td>@($"{record.TimeToArrival:h\\:mm}")</td>
+                                }
+                                        <BS_td>
+                                            <BSButton Color="Color.Primary" @onclick=@GetFlightDetailsIMainTab>Dodaj</BSButton>
+                                        </BS_td>
+                                        <BS_td >
+                                            
+                                            <BSButton Color="Color.Primary" @onclick="() => ExpandFlight(record)">@record.iataNumber</BSButton>
+                                            @*
+                                                <BSCollapse IsOpen="@record.IsOpen">
+                                                    <BSCard CardType="CardType.Card">
+                                                    <BSCard CardType="CardType.Text">Flight details</BSCard>
+                                                    </BSCard>
+                                                </BSCollapse>
+                                            *@
+                                            @record.FlightInfo.iataNumber
+                                        </BS_td>
+                                        <BS_td>@($"{record.TimeToArrival:h\\:mm}")</BS_td>
                             }
                         </ItemTemplate>
                     </BSDataTable>
@@ -103,6 +114,8 @@
                     <BSDataTable Items="flightInfos" Context="record" IsResponsive="true" IsStriped="true" @ref="SortableRef">
                         <HeaderTemplate>
                             <tr>
+
+                                <th scope="col">DODAJ</th>
                                 <th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataNumber"))" @onclick:preventDefault>NUMER LOTU</a></th>
                                 <th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataCode"))" @onclick:preventDefault>LOT DO</a></th>
                                 <th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("TimeToDeparture"))" @onclick:preventDefault>CZAS DO ODLOTU</a></th>
