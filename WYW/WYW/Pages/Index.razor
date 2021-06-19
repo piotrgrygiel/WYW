@@ -46,7 +46,6 @@
                     <BSTable>
                         <BS_thead>
                             <BS_tr>
-                                <BS_th scope="col">DODAJ</BS_th>
                                 <BS_th scope="col">NUMER LOTU</BS_th>
                                 <BS_th scope="col">CZAS DO PRZYLOTU</BS_th>
                             </BS_tr>
@@ -58,10 +57,6 @@
                                 {
                             <BS_tr>
                                 <BS_td>
-                                    <BSButton Color="Color.Primary" @onclick="() => GetFlightDetailsIMainTab(record)">Dodaj</BSButton>
-                                </BS_td>
-                                <BS_td>
-
                                     <BSButton Color="Color.Primary" @onclick="() => ExpandFlight(record)">@record.FlightInfo.flight.iataNumber</BSButton>
                                 </BS_td>
                                 <BS_td>@($"{record.TimeToArrival:h\\:mm}")</BS_td>
@@ -74,7 +69,7 @@
                                             <BS_thead>
                                                 <BS_tr>
                                                     <BS_th scope="col">FLIGHT STATUS / ACTION</BS_th>
-                                                    <BS_th scope="col">DEPARTURE TIME</BS_th>
+                                                    <BS_th scope="col">ARRIVAL TIME</BS_th>
                                                     <BS_th scope="col">TERMINAL</BS_th>
                                                     <BS_th scope="col">GATE</BS_th>
                                                 </BS_tr>
@@ -82,9 +77,9 @@
                                             <BS_tbody>
                                                 <BS_tr>
                                                     <BS_td>@record.FlightInfo.status</BS_td>
-                                                    <BS_td>@TimeZoneService.GetLocalDateTime(record.FlightInfo.departure.scheduledTime)</BS_td>
-                                                    <BS_td>@record.FlightInfo.departure.terminal</BS_td>
-                                                    <BS_td>@record.FlightInfo.departure.gate</BS_td>
+                                                    <BS_td>@TimeZoneService.GetLocalDateTime(record.FlightInfo.arrival.scheduledTime)</BS_td>
+                                                    <BS_td>@record.FlightInfo.arrival.terminal</BS_td>
+                                                    <BS_td>@record.FlightInfo.arrival.gate</BS_td>
                                                 </BS_tr>
                                             </BS_tbody>
                                         </BSTable>
@@ -112,16 +107,43 @@
                         <BS_tbody>
                             @foreach (var record in flightInfos)
                             {
-                                @if (record.FlightInfo.type == "departure")
+                            @if (record.FlightInfo.type == "departure")
                                 {
-                                    <BS_tr>
-                                        <BS_td>
-                                            <BSButton Color="Color.Primary" @onclick="() => GetFlightDetailsIMainTab(record)">Dodaj</BSButton>
-                                        </BS_td>
-                                        <BS_td>@record.FlightInfo.flight.iataNumber</BS_td>
-                                        <BS_td>@record.FlightInfo.arrival.iataCode</BS_td>
-                                        <BS_td>@($"{record.TimeToDeparture:h\\:mm}")</BS_td>
-                                    </BS_tr>
+                            <BS_tr>
+                                <BS_td>
+                                    <BSButton Color="Color.Primary" @onclick="() => GetFlightDetailsIMainTab(record)">Dodaj</BSButton>
+                                </BS_td>
+                                <BS_td>
+                                    <BSButton Color="Color.Primary" @onclick="() => ExpandFlight(record)">@record.FlightInfo.flight.iataNumber</BSButton>
+                                </BS_td>
+                                <BS_td>@record.FlightInfo.arrival.iataCode</BS_td>
+                                <BS_td>@($"{record.TimeToDeparture:h\\:mm}")</BS_td>
+                            </BS_tr>
+                            <BSCollapse IsOpen="@record.IsOpen">
+                                <BS_tr>
+                                    <BSCard CardType="CardType.Card">
+                                        <BSCard CardType="CardType.Text">Flight details</BSCard>
+                                        <BSTable>
+                                            <BS_thead>
+                                                <BS_tr>
+                                                    <BS_th scope="col">FLIGHT STATUS / ACTION</BS_th>
+                                                    <BS_th scope="col">DEPARTURE TIME</BS_th>
+                                                    <BS_th scope="col">TERMINAL</BS_th>
+                                                    <BS_th scope="col">GATE</BS_th>
+                                                </BS_tr>
+                                            </BS_thead>
+                                            <BS_tbody>
+                                                <BS_tr>
+                                                    <BS_td>@record.FlightInfo.status</BS_td>
+                                                    <BS_td>@TimeZoneService.GetLocalDateTime(record.FlightInfo.departure.scheduledTime)</BS_td>
+                                                    <BS_td>@record.FlightInfo.departure.terminal</BS_td>
+                                                    <BS_td>@record.FlightInfo.departure.gate</BS_td>
+                                                </BS_tr>
+                                            </BS_tbody>
+                                        </BSTable>
+                                    </BSCard>
+                                </BS_tr>
+                            </BSCollapse>
                                 }
                             }
                         </BS_tbody>
