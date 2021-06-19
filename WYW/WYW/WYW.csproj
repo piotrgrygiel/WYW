@@ -21,5 +21,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.5"/>
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7"/>
     <PackageReference Include="BlazorStrap" Version="1.5.101-preview-5"/>
+    <PackageReference Include="BlazorStrap.Extensions.BSDataTable" Version="1.5.0"/>
   </ItemGroup>
 </Project>

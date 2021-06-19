@@ -7,6 +7,8 @@ using System.Threading;
 using BlazorStrap;
 using System.Threading.Tasks;
 using WYW.Data;
+using Microsoft.AspNetCore.Components.Web;
+using BlazorStrap.Extensions.BSDataTable;
 
 namespace WYW.Pages
 {
@@ -29,6 +31,7 @@ namespace WYW.Pages
         private InputModel inputfdModel = new InputModel();
         private Timer timer = null;
         private List<ExtendedFlightInfo> flightInfos;
+        private BSDataTable<ExtendedFlightInfo> SortableRef { get; set; }
 
         protected override void OnInitialized()
         {

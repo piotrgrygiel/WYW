@@ -3,6 +3,7 @@
 @using WYW.Data
 @inject IJSRuntime JSRuntime;
 @using BlazorStrap;
+@using BlazorStrap.Extensions.BSDataTable;
 
 <BSTabGroup ShowEvent="@Show" HiddenEvent="@Hidden" HideEvent="@Hide" ShownEvent="@Shown">
     <BSTabList>
@@ -43,24 +44,24 @@
         <BSTab>
             <BSTabLabel>Przyloty</BSTabLabel>
                 <BSTabContent>
-                    <BSTable>
-                        <BS_thead>
-                            <BS_tr>
-                                <BS_th scope="col">NUMER LOTU</BS_th>
-                                <BS_th scope="col">CZAS DO PRZYLOTU</BS_th>
-                            </BS_tr>
-                        </BS_thead>
-                        <BS_tbody>
-                            @foreach (var record in flightInfos)
-                            {
+                    <BSDataTable Items="flightInfos" Context="record" IsResponsive="true" IsStriped="true" @ref="SortableRef">
+                        <HeaderTemplate>
+                            <tr>
+                                <th scope="col">DODAJ</th>
+                                <th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataNumber"))" @onclick:preventDefault>NUMER LOTU</a></th>
+                                <th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("TimeToArrival"))" @onclick:preventDefault>CZAS DO ODLOTU</a></th>
+                            </tr>
+                        </HeaderTemplate>
+                        <ItemTemplate>
                             @if (record.FlightInfo.type == "arrival")
-                                {
-                            <BS_tr>
-                                <BS_td>
-                                    <BSButton Color="Color.Primary" @onclick="() => ExpandFlight(record)">@record.FlightInfo.flight.iataNumber</BSButton>
-                                </BS_td>
-                                <BS_td>@($"{record.TimeToArrival:h\\:mm}")</BS_td>
-                            </BS_tr>
+                            {
+                                    <td>
+                                        <BSButton Color="Color.Primary" @onclick=@GetFlightDetailsIMainTab>Dodaj</BSButton>
+                                    </td>
+                                    <td>
+                                        <BSButton Color="Color.Primary" @onclick="() => ExpandFlight(record)">@record.iataNumber</BSButton>
+                                    </td>
+                                    <td>@($"{record.TimeToArrival:h\\:mm}")</td>
                             <BSCollapse IsOpen="@record.IsOpen">
                                 <BS_tr>
                                     <BSCard CardType="CardType.Card">
@@ -86,39 +87,35 @@
                                     </BSCard>
                                 </BS_tr>
                             </BSCollapse>
-                                }
                             }
-                        </BS_tbody>
-                    </BSTable>
+                        </ItemTemplate>
+                    </BSDataTable>
                 </BSTabContent>
             </BSTab>
             <BSTab>
                 <BSTabLabel>Odloty</BSTabLabel>
                 <BSTabContent>
-                    <BSTable>
-                        <BS_thead>
-                            <BS_tr>
-                                <BS_th scope="col">DODAJ</BS_th>
-                                <BS_th scope="col">NUMER LOTU</BS_th>
-                                <BS_th scope="col">LOT DO</BS_th>
-                                <BS_th scope="col">CZAS DO ODLOTU</BS_th>
-                            </BS_tr>
-                        </BS_thead>
-                        <BS_tbody>
-                            @foreach (var record in flightInfos)
-                            {
+                    <BSDataTable Items="flightInfos" Context="record" IsResponsive="true" IsStriped="true" @ref="SortableRef">
+                        <HeaderTemplate>
+                            <tr>
+
+                                <th scope="col">DODAJ</th>
+                                <th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataNumber"))" @onclick:preventDefault>NUMER LOTU</a></th>
+                                <th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataCode"))" @onclick:preventDefault>LOT DO</a></th>
+                                <th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("TimeToDeparture"))" @onclick:preventDefault>CZAS DO ODLOTU</a></th>
+                            </tr>
+                            </HeaderTemplate>
+                        <ItemTemplate>
                             @if (record.FlightInfo.type == "departure")
                                 {
-                            <BS_tr>
                                 <BS_td>
                                     <BSButton Color="Color.Primary" @onclick="() => GetFlightDetailsIMainTab(record)">Dodaj</BSButton>
                                 </BS_td>
                                 <BS_td>
-                                    <BSButton Color="Color.Primary" @onclick="() => ExpandFlight(record)">@record.FlightInfo.flight.iataNumber</BSButton>
+                                    <BSButton Color="Color.Primary" @onclick="() => ExpandFlight(record)">@record.iataNumber</BSButton>
                                 </BS_td>
-                                <BS_td>@record.FlightInfo.arrival.iataCode</BS_td>
+                                <BS_td>@record.iataCode</BS_td>
                                 <BS_td>@($"{record.TimeToDeparture:h\\:mm}")</BS_td>
-                            </BS_tr>
                             <BSCollapse IsOpen="@record.IsOpen">
                                 <BS_tr>
                                     <BSCard CardType="CardType.Card">
@@ -146,8 +143,8 @@
                             </BSCollapse>
                                 }
                             }
-                        </BS_tbody>
-                    </BSTable>
+                        </ItemTemplate>
+                    </BSDataTable>
                 </BSTabContent>
         </BSTab>
     </BSTabList>
