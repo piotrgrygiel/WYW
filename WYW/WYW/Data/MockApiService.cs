@@ -5,7 +5,21 @@ namespace WYW.Data
 {
     public class MockApiService : IApiResponseService
     {
-        public RecentResponse RecentResponse { get; set; }
+        private RecentResponse recentResponse;
+        public RecentResponse RecentResponse
+        {
+            get => recentResponse;
+            set
+            {
+                PreviousResponse = RecentResponse;
+
+                recentResponse = value;
+
+                if (PreviousResponse != null)
+                    LookupForChanges();
+            }
+        }
+
         private RecentResponse PreviousResponse { get; set; }
         public event Action<FlightInfo> SomeDataChanged;
 
@@ -23,10 +37,9 @@ namespace WYW.Data
             SomeDataChanged?.Invoke(e);
         }
 
-        public async Task CheckTheApiEvery5m()
+        private void LookupForChanges()
         {            
-            while (true)
-            {
+
                 ////zgłaszamy zaistnienie zmiany
                 foreach(FlightInfo flight in RecentResponse.LastResponse)
                 {
@@ -46,9 +59,6 @@ namespace WYW.Data
                 }
 
                 PreviousResponse = RecentResponse;
-                    
-                await Task.Delay(5*60000);
-            }
         }
     }
 }
