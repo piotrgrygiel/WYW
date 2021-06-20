@@ -32,6 +32,7 @@ namespace WYW.Pages
         private Timer timer = null;
         private List<ExtendedFlightInfo> flightInfos;
         private BSDataTable<ExtendedFlightInfo> SortableRef { get; set; }
+        private BSTabGroup TabGroup;
 
         protected override void OnInitialized()
         {
@@ -50,6 +51,7 @@ namespace WYW.Pages
             chosenFlightInfo = flight;
             await UpdateTimeSpans();
             await InvokeAsync(StateHasChanged);
+            TabGroup.SelectTabById("flightTab");
         }
 
         //private void HandleValidSubmit()
