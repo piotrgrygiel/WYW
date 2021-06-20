@@ -44,7 +44,6 @@ namespace WYW.Pages
             {
                 ApiService.SomeDataChanged += OnFlightChanged;
                 flightInfos = ApiService.RecentResponse.LastResponse
-                flightInfos = ApiService.RecentResponse.LastResponse
                                                     .Select(fi => new ExtendedFlightInfo(fi))
                                                     .ToList();
 

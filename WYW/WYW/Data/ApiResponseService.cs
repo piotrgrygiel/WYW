@@ -14,6 +14,20 @@ namespace WYW.Data
         private RecentResponse PreviousResponse { get; set; }
         private HttpClient client = new HttpClient();
 
+        public ApiResponseService()
+        {
+            RecentResponse = new RecentResponse()
+            {
+                LastResponseDT = DateTime.Now,
+                LastResponse = new FlightInfo[0]
+            };
+            PreviousResponse = new RecentResponse()
+            {
+                LastResponseDT = DateTime.Now,
+                LastResponse = new FlightInfo[0]
+            };
+        }
+
         protected virtual void OnSomeDataChanged(FlightInfo e)
         {
             SomeDataChanged?.Invoke(e);
