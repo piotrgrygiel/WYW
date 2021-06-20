@@ -1,12 +1,14 @@
 ﻿@inherits LayoutComponentBase
 
 <div class="page">
+    @*
     <div class="sidebar">
         <NavMenu />
     </div>
+    *@
 
     <div class="main">
-        <ConsentCookie />
+        
         <div class="top-row px-4 auth">
             <LoginDisplay />
             @*<a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>*@
@@ -14,6 +16,10 @@
 
         <div class="content px-4">
             @Body
+        </div>
+
+        <div>
+            <ConsentCookie />
         </div>
     </div>
 </div>

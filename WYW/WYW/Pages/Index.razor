@@ -7,6 +7,8 @@
 
 <BSTabGroup ShowEvent="@Show" HiddenEvent="@Hidden" HideEvent="@Hide" ShownEvent="@Shown">
     <BSTabList>
+
+@*MOJE LOTY TAB START*@
         <BSTab>
             <BSTabLabel>Moje Loty</BSTabLabel>
             <BSTabContent>
@@ -41,106 +43,149 @@
                 }
             </BSTabContent>
         </BSTab>
-        <BSTab>
-            <BSTabLabel>Przyloty</BSTabLabel>
-                <BSTabContent>
-                    <BSDataTable Items="flightInfos" Context="record" IsResponsive="true" IsStriped="true" @ref="SortableRef">
-                        <HeaderTemplate>
-                            <BS_tr>
-                                <BS_th scope="col">DODAJ</BS_th>
-                                <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataNumber"))" @onclick:preventDefault>NUMER LOTU</a></BS_th>
-                                <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("TimeToArrival"))" @onclick:preventDefault>CZAS DO ODLOTU</a></BS_th>
-                            </BS_tr>
-                        </HeaderTemplate>
-                        <ItemTemplate>
-                            @if (record.FlightInfo.type == "arrival")
-                            {
-                                <BS_td>
-                                    <BSButton Color="Color.Primary" @onclick="() => GetFlightDetailsIMainTab(record)">Dodaj</BSButton>
-                                </BS_td>
-                                <BS_td>
-                                    <BSButton Color="Color.Primary" @onclick="() => ExpandFlight(record)">@record.iataNumber</BSButton>
-                                </BS_td>
-                                <BS_td>@($"{record.TimeToArrival:h\\:mm}")</BS_td>
-                                <BSCollapse IsOpen="@record.IsOpen">
-                                        <BSCard CardType="CardType.Card">
-                                            <BSCard CardType="CardType.Text">Flight details</BSCard>
-                                            <BSTable>
-                                                <BS_thead>
-                                                    <BS_tr>
-                                                        <BS_th scope="col">FLIGHT STATUS / ACTION</BS_th>
-                                                        <BS_th scope="col">ARRIVAL TIME</BS_th>
-                                                        <BS_th scope="col">TERMINAL</BS_th>
-                                                        <BS_th scope="col">GATE</BS_th>
-                                                    </BS_tr>
-                                                </BS_thead>
-                                                <BS_tbody>
-                                                    <BS_tr>
-                                                        <BS_td>@record.FlightInfo.status</BS_td>
-                                                        <BS_td>@TimeZoneService.GetLocalDateTime(record.FlightInfo.arrival.scheduledTime)</BS_td>
-                                                        <BS_td>@record.FlightInfo.arrival.terminal</BS_td>
-                                                        <BS_td>@record.FlightInfo.arrival.gate</BS_td>
-                                                    </BS_tr>
-                                                </BS_tbody>
-                                            </BSTable>
-                                        </BSCard>
-                                </BSCollapse>
-                            }
-                        </ItemTemplate>
-                    </BSDataTable>
-                </BSTabContent>
-            </BSTab>
+@*MOJE LOTY TAB END*@
+
+@*ODLOTY TAB START*@
             <BSTab>
                 <BSTabLabel>Odloty</BSTabLabel>
                 <BSTabContent>
                     <BSDataTable Items="flightInfos" Context="record" IsResponsive="true" IsStriped="true" @ref="SortableRef">
                         <HeaderTemplate>
                             <BS_tr>
-                                <BS_th scope="col">DODAJ</BS_th>
                                 <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataNumber"))" @onclick:preventDefault>NUMER LOTU</a></BS_th>
                                 <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataCode"))" @onclick:preventDefault>LOT DO</a></BS_th>
                                 <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("TimeToDeparture"))" @onclick:preventDefault>CZAS DO ODLOTU</a></BS_th>
+                                <BS_th scope="col">   </BS_th>
                             </BS_tr>
                         </HeaderTemplate>
                         <ItemTemplate>
                             @if (record.FlightInfo.type == "departure")
                             {
+                            
                                 <BS_td>
-                                    <BSButton Color="Color.Primary" @onclick="() => GetFlightDetailsIMainTab(record)">Dodaj</BSButton>
+                                    <BSButton Color="Color.Primary" @onclick="@(() => FullWidth.Show())">@record.iataNumber</BSButton>
                                 </BS_td>
+
                                 <BS_td>
-                                    <BSButton Color="Color.Primary" @onclick="() => ExpandFlight(record)">@record.iataNumber</BSButton>
+                                    @record.iataCode
                                 </BS_td>
-                                <BS_td>@record.iataCode</BS_td>
-                                <BS_td>@($"{record.TimeToDeparture:h\\:mm}")</BS_td>
-                                <BSCollapse IsOpen="@record.IsOpen">
-                                        <BSCard CardType="CardType.Card">
-                                            <BSCard CardType="CardType.Text">Flight details</BSCard>
-                                            <BSTable>
-                                                <BS_thead>
-                                                    <BS_tr>
-                                                        <BS_th scope="col">FLIGHT STATUS / ACTION</BS_th>
-                                                        <BS_th scope="col">DEPARTURE TIME</BS_th>
-                                                        <BS_th scope="col">TERMINAL</BS_th>
-                                                        <BS_th scope="col">GATE</BS_th>
-                                                    </BS_tr>
-                                                </BS_thead>
-                                                <BS_tbody>
-                                                    <BS_tr>
-                                                        <BS_td>@record.FlightInfo.status</BS_td>
-                                                        <BS_td>@TimeZoneService.GetLocalDateTime(record.FlightInfo.departure.scheduledTime)</BS_td>
-                                                        <BS_td>@record.FlightInfo.departure.terminal</BS_td>
-                                                        <BS_td>@record.FlightInfo.departure.gate</BS_td>
-                                                    </BS_tr>
-                                                </BS_tbody>
-                                            </BSTable>
-                                        </BSCard>
-                                </BSCollapse>
+                                
+                                <BS_td>
+                                    @($"{record.TimeToDeparture:h\\:mm}")
+                                </BS_td>
+
+                                <BS_td>
+                                    <BSButton Color="Color.Primary" @onclick="() => GetFlightDetailsIMainTab(record)">+</BSButton>
+                                </BS_td>
+                            
+                            <BSModal @ref="FullWidth" IsFullWidth="true">
+                                    <BSModalHeader OnClick="@(() => FullWidth.Hide())">Szczegóły lotu @record.FlightInfo.flight.iataNumber</BSModalHeader>
+                                    <BSModalBody>
+                                        <BSTable>
+                                            <BS_tbody>
+                                                <BS_tr>
+                                                    <BS_th scope="row">Status</BS_th> 
+                                                    <BS_td>@record.FlightInfo.status</BS_td>
+                                                </BS_tr>
+                                                <BS_tr>
+                                                    <BS_th scope="row">Czas odlotu</BS_th> 
+                                                    <BS_td>@TimeZoneService.GetLocalDateTime(record.FlightInfo.departure.scheduledTime)</BS_td>
+                                                </BS_tr>
+                                                <BS_tr>
+                                                    <BS_th scope="row">Terminal</BS_th> 
+                                                    <BS_td>@record.FlightInfo.departure.terminal</BS_td>
+                                                </BS_tr>
+                                                <BS_tr>
+                                                    <BS_th scope="row">Bramka</BS_th> 
+                                                    <BS_td>@record.FlightInfo.departure.gate</BS_td>
+                                                </BS_tr>
+                                                <BS_tr>
+                                                    <BS_th scope="row">Pozycja</BS_th> 
+                                                    <BS_td><a href="https://www.flightradar24.com/data/flights/@record.FlightInfo.flight.iataNumber" target="_blank">flightradar24.com</a></BS_td>
+                                                </BS_tr>
+                                            </BS_tbody>
+                                        </BSTable>
+                                    </BSModalBody>
+                                    <BSModalFooter>
+                                        <BSButton Color="Color.Primary" @onclick="@(() => FullWidth.Hide())">Zamknij</BSButton>    
+                                    </BSModalFooter>
+                                </BSModal>
+                                @code {
+                                    BSModal FullWidth { get; set; }
+                                }
+                                
                             }
                         </ItemTemplate>
                     </BSDataTable>
                 </BSTabContent>
             </BSTab>
+@*ODLOTY TAB END*@
+
+@*PRZYLOTY TAB START*@
+        <BSTab>
+            <BSTabLabel>Przyloty</BSTabLabel>
+                <BSTabContent>
+                    <BSDataTable Items="flightInfos" Context="record" IsResponsive="true" IsStriped="true" @ref="SortableRef">
+                        <HeaderTemplate>
+                            <BS_tr>
+                                
+                                <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataNumber"))" @onclick:preventDefault>NUMER LOTU</a></BS_th>
+                                <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("TimeToArrival"))" @onclick:preventDefault>CZAS DO ODLOTU</a></BS_th>
+                                <BS_th scope="col">DODAJ</BS_th>
+                            </BS_tr>
+                        </HeaderTemplate>
+                        <ItemTemplate>
+                            @if (record.FlightInfo.type == "arrival")
+                            {
+                                <BS_td>
+                                    <BSButton Color="Color.Primary" @onclick="@(() => FullWidth.Show())">@record.iataNumber</BSButton>
+                                </BS_td>
+                                <BS_td>@($"{record.TimeToArrival:h\\:mm}")</BS_td>
+                                 <BS_td>
+                                    <BSButton Color="Color.Primary" @onclick="() => GetFlightDetailsIMainTab(record)">+</BSButton>
+                                </BS_td>
+                            <BSModal @ref="FullWidth" IsFullWidth="true">
+                                    <BSModalHeader OnClick="@(() => FullWidth.Hide())">Szczegóły lotu @record.FlightInfo.flight.iataNumber</BSModalHeader>
+                                    <BSModalBody>
+                                        <BSTable>
+                                            <BS_tbody>
+                                                <BS_tr>
+                                                    <BS_th scope="row">Status</BS_th> 
+                                                    <BS_td>@record.FlightInfo.status</BS_td>
+                                                </BS_tr>
+                                                <BS_tr>
+                                                    <BS_th scope="row">Czas odlotu</BS_th> 
+                                                    <BS_td>@TimeZoneService.GetLocalDateTime(record.FlightInfo.departure.scheduledTime)</BS_td>
+                                                </BS_tr>
+                                                <BS_tr>
+                                                    <BS_th scope="row">Terminal</BS_th> 
+                                                    <BS_td>@record.FlightInfo.departure.terminal</BS_td>
+                                                </BS_tr>
+                                                <BS_tr>
+                                                    <BS_th scope="row">Bramka</BS_th> 
+                                                    <BS_td>@record.FlightInfo.departure.gate</BS_td>
+                                                </BS_tr>
+                                                <BS_tr>
+                                                    <BS_th scope="row">Pozycja</BS_th> 
+                                                    <BS_td><a href="https://www.flightradar24.com/data/flights/@record.FlightInfo.flight.iataNumber" target="_blank">flightradar24.com</a></BS_td>
+                                                </BS_tr>
+                                            </BS_tbody>
+                                        </BSTable>
+                                    </BSModalBody>
+                                    <BSModalFooter>
+                                        <BSButton Color="Color.Primary" @onclick="@(() => FullWidth.Hide())">Zamknij</BSButton>    
+                                    </BSModalFooter>
+                                </BSModal>
+
+                            }
+                        </ItemTemplate>
+                    </BSDataTable>
+                </BSTabContent>
+            </BSTab>
+@*PRZYLOTY TAB END*@
+
+
+
         </BSTabList>
     <BSTabSelectedContent/>
 </BSTabGroup>
