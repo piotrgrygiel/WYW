@@ -62,7 +62,7 @@ namespace WYW.Pages
         private void OnFlightChanged(FlightInfo flight)
         {
             var changedFlight = flightInfos.FirstOrDefault(fi => fi.FlightInfo.flight.iataNumber == flight.flight.iataNumber);
-            ExtendedFlightInfo updatedFlight = null;
+            ExtendedFlightInfo updatedFlight = new ExtendedFlightInfo(flight);
 
             if (changedFlight != null)
             {
@@ -88,7 +88,7 @@ namespace WYW.Pages
                 flightInfos.Add(updatedFlight);
             }
 
-            if (chosenFlightInfo.FlightInfo.flight.iataNumber == flight.flight.iataNumber)
+            if (chosenFlightInfo != null && chosenFlightInfo.FlightInfo.flight.iataNumber == flight.flight.iataNumber)
                 chosenFlightInfo = updatedFlight;
 
             UpdateTimeSpans();
