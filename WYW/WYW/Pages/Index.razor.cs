@@ -72,17 +72,17 @@ namespace WYW.Pages
                 else
                     updatedFlight.IsStatusChanged = false;
                 if(changedFlight.FlightInfo.departure.scheduledTime != flight.departure.scheduledTime)
-                    updatedFlight.IsStatusChanged = true;
+                    updatedFlight.IsScheduledTimeChanged = true;
                 else
-                    updatedFlight.IsStatusChanged = false;
+                    updatedFlight.IsScheduledTimeChanged = false;
                 if(changedFlight.FlightInfo.departure.terminal != flight.departure.terminal)
-                    updatedFlight.IsStatusChanged = true;
+                    updatedFlight.IsTerminalChanged = true;
                 else
-                    updatedFlight.IsStatusChanged = false;
+                    updatedFlight.IsTerminalChanged = false;
                 if(changedFlight.FlightInfo.departure.gate != flight.departure.gate)
-                    updatedFlight.IsStatusChanged = true;
+                    updatedFlight.IsGateChanged = true;
                 else
-                    updatedFlight.IsStatusChanged = false;
+                    updatedFlight.IsGateChanged = false;
 
                 flightInfos.Remove(changedFlight);
                 flightInfos.Add(updatedFlight);
