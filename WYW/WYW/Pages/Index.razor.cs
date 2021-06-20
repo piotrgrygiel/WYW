@@ -42,6 +42,8 @@ namespace WYW.Pages
         {
             try
             {
+                ApiService.SomeDataChanged += OnFlightChanged;
+                flightInfos = ApiService.RecentResponse.LastResponse
                 flightInfos = ApiService.RecentResponse.LastResponse
                                                     .Select(fi => new ExtendedFlightInfo(fi))
                                                     .ToList();
@@ -56,6 +58,37 @@ namespace WYW.Pages
             {
                 exceptionDetails = ex.ToString();
             }
+        }
+
+        private void OnFlightChanged(FlightInfo flight)
+        {
+            var changedFlight = flightInfos.FirstOrDefault(fi => fi.FlightInfo.flight.iataNumber == flight.flight.iataNumber);
+
+            if (changedFlight != null)
+            {
+                ExtendedFlightInfo updatedFlight = new ExtendedFlightInfo(flight);
+                if(changedFlight.FlightInfo.status != flight.status)
+                    updatedFlight.IsStatusChanged = true;
+                else
+                    updatedFlight.IsStatusChanged = false;
+                if(changedFlight.FlightInfo.departure.scheduledTime != flight.departure.scheduledTime)
+                    updatedFlight.IsStatusChanged = true;
+                else
+                    updatedFlight.IsStatusChanged = false;
+                if(changedFlight.FlightInfo.departure.terminal != flight.departure.terminal)
+                    updatedFlight.IsStatusChanged = true;
+                else
+                    updatedFlight.IsStatusChanged = false;
+                if(changedFlight.FlightInfo.departure.gate != flight.departure.gate)
+                    updatedFlight.IsStatusChanged = true;
+                else
+                    updatedFlight.IsStatusChanged = false;
+
+                flightInfos.Remove(changedFlight);
+                flightInfos.Add(updatedFlight);
+            }
+
+            UpdateTimeSpans();
         }
 
         private async Task GetFlightDetailsIMainTab(ExtendedFlightInfo flight)
@@ -126,6 +159,8 @@ namespace WYW.Pages
         {
             if (timer != null)
                 timer.Dispose();
+
+            ApiService.SomeDataChanged -= OnFlightChanged;
         }
 
         private void Show (BSTabEvent e)
