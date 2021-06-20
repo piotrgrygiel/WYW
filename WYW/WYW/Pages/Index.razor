@@ -2,129 +2,277 @@
 @using Microsoft.Extensions.Logging
 @using WYW.Data
 @inject IJSRuntime JSRuntime;
+@inject NavigationManager NavManager
 @using BlazorStrap;
+@using BlazorStrap.Extensions.BSDataTable;
 
-<BSTabGroup ShowEvent="@Show" HiddenEvent="@Hidden" HideEvent="@Hide" ShownEvent="@Shown">
+@if(exceptionDetails != null)
+{
+<p>@exceptionDetails</p>
+}
+
+<BSContainer>
+<BSRow>
+
+<BSCol SM="12" MD="6" MDOffset="3">
+
+<BS_Table>
+    <BS_tbody>
+        <BS_tr>
+            <BS_td>
+                <div img>
+                <BSImage IsRounded="false" Alignment="Alignment.Center" src="./img/lotnisko-poznan-lawica_sm.png" alt="Poznan Ławica" />
+                </div>
+            </BS_td>
+        </BS_tr>
+    </BS_tbody>
+</BS_Table>
+
+
+
+<BSTabGroup @ref="TabGroup" ShowEvent="@Show" HiddenEvent="@Hidden" HideEvent="@Hide" ShownEvent="@Shown">
     <BSTabList>
-        <BSTab>
+@*MOJE LOTY TAB START*@
+        <BSTab Id="flightTab">
             <BSTabLabel>Moje Loty</BSTabLabel>
             <BSTabContent>
-                <div class="card m-3">
-                    <h2 class="card-header"> Enter Your Flight Number: </h2> 
-                        <div class="card-body">
-                            <EditForm Model="@inputfdModel" OnValidSubmit="@HandleValidSubmit">
-                            <div class="form-row">
-                                <div class="form-group col">
-                                    <DataAnnotationsValidator />
-                                    <ValidationSummary />
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col">
-                                    <InputSelect id="flightno" @bind-Value="inputfdModel.Name" class="form-control">
-                                    @foreach (var value in ApiService.RecentResponse.LastResponse)
-                                    {
-                                        <option value=@value.flight.iataNumber>@value.flight.iataNumber</option>
-                                    }
-                                    </InputSelect>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col">
-                                    <button class="btn btn-primary" type="submit" @onclick="HandleValidSubmit">Check</button>
-                                </div>
-                                <div class="form-group col">
-                                    <button class="btn btn-primary" type="submit">Subscribe</button>
-                                </div>
-                            </div>
-                            </EditForm>
-                        </div>
+                
+                <br>
+                @if (chosenFlightInfo != null)
+                {
+                    
+                    <div class="card m-1">
+                    <h2 class="card-header"> TWÓJ LOT: @chosenFlightInfo.FlightInfo.flight.iataNumber</h2> 
                     </div>
-                    <br>
-                        @if (!userFilledFlightNumber)
-                        {
-                        }
-                        else if (flightInfo != null)
-                        {
-                            <BSTable>
-                                <BS_thead>
-                                    <BS_tr>
-                                        <BS_th scope="col">FLIGHT STATUS / ACTION</BS_th>
-                                        <BS_th scope="col">DEPARTURE TIME</BS_th>
-                                        <BS_th scope="col">TERMINAL</BS_th>
-                                        <BS_th scope="col">GATE</BS_th>
-                                    </BS_tr>
-                                </BS_thead>
-                                <BS_tbody>
-                                    <BS_tr>
-                                        <BS_td>@flightInfo.status</BS_td>
-                                        <BS_td>@flightInfo.departure.scheduledTime.ToLocalTime()</BS_td>
-                                        <BS_td>@flightInfo.departure.terminal</BS_td>
-                                        <BS_td>@flightInfo.departure.gate</BS_td>
-                                    </BS_tr>
-                                </BS_tbody>
-                            </BSTable>
-                        }
-                        else
-                        {
-                            <p>Flight not found</p>
-                        }
+
+                     <BSTable>
+                        <BS_tbody>
+                            <BS_tr>
+                                <BS_th scope="row">Status</BS_th>
+                                @if(chosenFlightInfo.IsStatusChanged)
+                                {
+                                    <BSTableRow Color="Color.Warning">
+                                        <BS_td>@chosenFlightInfo.FlightInfo.status</BS_td>
+                                    </BSTableRow>
+                                }
+                                else
+                                {
+                                    <BSTableRow>
+                                        <BS_td>@chosenFlightInfo.FlightInfo.status</BS_td>
+                                    </BSTableRow>
+                                }
+                            </BS_tr>
+                             <BS_tr>
+                                <BS_th scope="row">Czas odlotu</BS_th>
+                                @if(chosenFlightInfo.IsScheduledTimeChanged)
+                                {
+                                    <BSTableRow Color="Color.Warning">
+                                        <BS_td>@chosenFlightInfo.FlightInfo.departure.scheduledTime.ToLocalTime()</BS_td>
+                                    </BSTableRow>
+                                }
+                                else
+                                {
+                                    <BSTableRow>
+                                        <BS_td>@chosenFlightInfo.FlightInfo.departure.scheduledTime.ToLocalTime()</BS_td>
+                                    </BSTableRow>
+                                }
+                             </BS_tr>
+                            <BS_tr>
+                                <BS_th scope="row">Terminal</BS_th>
+                                @if(chosenFlightInfo.IsTerminalChanged)
+                                {
+                                    <BSTableRow Color="Color.Warning">
+                                        <BS_td>@chosenFlightInfo.FlightInfo.departure.terminal</BS_td>
+                                    </BSTableRow>
+                                }
+                                else
+                                {
+                                    <BSTableRow>
+                                        <BS_td>@chosenFlightInfo.FlightInfo.departure.terminal</BS_td>
+                                    </BSTableRow>
+                                }
+                            </BS_tr>
+                             <BS_tr>
+                                <BS_th scope="row">Bramka</BS_th>
+                                @if(chosenFlightInfo.IsGateChanged)
+                                {
+                                    <BSTableRow Color="Color.Warning">
+                                        <BS_td>@chosenFlightInfo.FlightInfo.departure.gate</BS_td>
+                                    </BSTableRow>
+                                }
+                                else
+                                {
+                                    <BSTableRow>
+                                        <BS_td>@chosenFlightInfo.FlightInfo.departure.gate</BS_td>
+                                    </BSTableRow>
+                                }
+                            </BS_tr>
+                               <BS_tr>
+                                    <BS_th scope="row">Pozycja</BS_th> 
+                                    <BS_td>
+
+                                        <a href="https://www.flightradar24.com/data/flights/@chosenFlightInfo.FlightInfo.flight.iataNumber.ToLower()" target="_blank">flightradar24.com</a>
+                                    </BS_td>
+                                </BS_tr>
+                        </BS_tbody>
+                    </BSTable>                   
+                }
+                else
+                {
+                    <h3>Witamy na lotnisku Poznań Ławica.</h3><br>
+                    <h4>Dodaj swój lot Korzystając z list dostępnych w zakładkach Odloty lub Przyloty.<br>
+                    Aplikacja poinformuje Cię o zmianach statusu lotu</h4>
+                }
             </BSTabContent>
         </BSTab>
-        <BSTab>
-            <BSTabLabel>Przyloty</BSTabLabel>
-                <BSTabContent>
-                    <BSTable>
-                        <BS_thead>
-                            <BS_tr>
-                                <BS_th scope="col">NUMER LOTU</BS_th>
-                                <BS_th scope="col">LOT Z</BS_th>
-                                <BS_th scope="col">CZAS DO PRZYLOTU</BS_th>
-                            </BS_tr>
-                        </BS_thead>
-                        <BS_tbody>
-                            @foreach (var record in flightInfos)
-                            {
-                                @if (record.FlightInfo.type == "arrival")
-                                {
-                                    <BS_tr>
-                                        <BS_td>@record.FlightInfo.flight.iataNumber</BS_td>
-                                        <BS_td>@record.FlightInfo.arrival.iataCode</BS_td>
-                                        <BS_td>@($"{record.TimeToArrival:h\\:mm}")</BS_td>
-                                    </BS_tr>
-                                }
-                            }
-                        </BS_tbody>
-                    </BSTable>
-                </BSTabContent>
-            </BSTab>
-            <BSTab>
+@*MOJE LOTY TAB END*@
+
+@*ODLOTY TAB START*@
+            <BSTab Id="departureTab">
                 <BSTabLabel>Odloty</BSTabLabel>
                 <BSTabContent>
-                    <BSTable>
-                        <BS_thead>
+                    <BSDataTable Items="flightInfos" Context="record" IsResponsive="true" IsStriped="true" @ref="SortableRef">
+                        <HeaderTemplate>
                             <BS_tr>
-                                <BS_th scope="col">NUMER LOTU</BS_th>
-                                <BS_th scope="col">LOT DO</BS_th>
-                                <BS_th scope="col">CZAS DO ODLOTU</BS_th>
+                                <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataNumber"))" @onclick:preventDefault>NUMER LOTU</a></BS_th>
+                                <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataCode"))" @onclick:preventDefault>LOT DO</a></BS_th>
+                                <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("TimeToDeparture"))" @onclick:preventDefault>CZAS DO ODLOTU</a></BS_th>
+                                <BS_th scope="col">   </BS_th>
                             </BS_tr>
-                        </BS_thead>
-                        <BS_tbody>
-                            @foreach (var record in flightInfos)
+                        </HeaderTemplate>
+                        <ItemTemplate>
+                            @if (record.FlightInfo.type == "departure")
                             {
-                                @if (record.FlightInfo.type == "departure")
-                                {
-                                    <BS_tr>
-                                        <BS_td>@record.FlightInfo.flight.iataNumber</BS_td>
-                                        <BS_td>@record.FlightInfo.arrival.iataCode</BS_td>
-                                        <BS_td>@($"{record.TimeToDeparture:h\\:mm}")</BS_td>
-                                    </BS_tr>
-                                }
+                            <BS_td>
+                                <BSButton Color="Color.Primary" @onclick="@(() => ExpandFlight2(record))">@record.iataNumber</BSButton>
+                            </BS_td>
+
+                            <BS_td>
+                                @record.iataCode
+                            </BS_td>
+
+                            <BS_td>
+                                @($"{record.TimeToDeparture:h\\:mm}")
+                            </BS_td>
+
+                            <BS_td>
+                                <BSButton Color="Color.Primary" @onclick="() => GetFlightDetailsIMainTab(record)">+</BSButton>
+                            </BS_td>
+                            @if (modalFlightInfo != null)
+                            {
+                            <BSModal @ref="FullWidth" IsFullWidth="true">
+                                <BSModalHeader OnClick="@(() => FullWidth.Hide())">Szczegóły lotu @modalFlightInfo.FlightInfo.flight.iataNumber</BSModalHeader>
+                                <BSModalBody>
+                                    <BSTable>
+                                        <BS_tbody>
+                                            <BS_tr>
+                                                <BS_th scope="row">Status</BS_th>
+                                                <BS_td>@modalFlightInfo.FlightInfo.status</BS_td>
+                                            </BS_tr>
+                                            <BS_tr>
+                                                <BS_th scope="row">Czas odlotu</BS_th>
+                                                <BS_td>@modalFlightInfo.FlightInfo.departure.scheduledTime.ToLocalTime()</BS_td>
+                                            </BS_tr>
+                                            <BS_tr>
+                                                <BS_th scope="row">Terminal</BS_th>
+                                                <BS_td>@modalFlightInfo.FlightInfo.departure.terminal</BS_td>
+                                            </BS_tr>
+                                            <BS_tr>
+                                                <BS_th scope="row">Bramka</BS_th>
+                                                <BS_td>@modalFlightInfo.FlightInfo.departure.gate</BS_td>
+                                            </BS_tr>
+                                            <BS_tr>
+                                                <BS_th scope="row">Pozycja</BS_th>
+                                                <BS_td><a href="https://www.flightradar24.com/data/flights/@modalFlightInfo.FlightInfo.flight.iataNumber" target="_blank">flightradar24.com</a></BS_td>
+                                            </BS_tr>
+                                        </BS_tbody>
+                                    </BSTable>
+                                </BSModalBody>
+                                <BSModalFooter>
+                                    <BSButton Color="Color.Primary" @onclick="@(() => FullWidth.Hide())">Zamknij</BSButton>
+                                </BSModalFooter>
+                            </BSModal>
                             }
-                        </BS_tbody>
-                    </BSTable>
+                            }
+                        </ItemTemplate>
+                    </BSDataTable>
                 </BSTabContent>
-        </BSTab>
-    </BSTabList>
+            </BSTab>
+@*ODLOTY TAB END*@
+
+@*PRZYLOTY TAB START*@
+        <BSTab Id="arrivalTab">
+            <BSTabLabel>Przyloty</BSTabLabel>
+                <BSTabContent>
+                    <BSDataTable Items="flightInfos" Context="record" IsResponsive="true" IsStriped="true" @ref="SortableRef">
+                        <HeaderTemplate>
+                            <BS_tr>
+                                
+                                <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataNumber"))" @onclick:preventDefault>NUMER LOTU</a></BS_th>
+                                <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("TimeToArrival"))" @onclick:preventDefault>CZAS DO PRZYLOTU</a></BS_th>
+                                <BS_th scope="col">   </BS_th>
+                            </BS_tr>
+                        </HeaderTemplate>
+                        <ItemTemplate>
+                            @if (record.FlightInfo.type == "arrival")
+                            {
+                                <BS_td>
+                                    <BSButton Color="Color.Primary" @onclick="@(() => ExpandFlight2(record))">@record.iataNumber</BSButton>
+                                </BS_td>
+                                <BS_td>@($"{record.TimeToArrival:h\\:mm}")</BS_td>
+                                 <BS_td>
+                                    <BSButton Color="Color.Primary" @onclick="() => GetFlightDetailsIMainTab(record)">+</BSButton>
+                                </BS_td>
+                      
+                            @if (modalFlightInfo != null)
+                            {
+                                <BSModal @ref="FullWidth" IsFullWidth="true">
+                                    <BSModalHeader OnClick="@(() => FullWidth.Hide())">Szczegóły lotu @modalFlightInfo.FlightInfo.flight.iataNumber</BSModalHeader>
+                                    <BSModalBody>
+                                        <BSTable>
+                                            <BS_tbody>
+                                                <BS_tr>
+                                                    <BS_th scope="row">Status</BS_th> 
+                                                    <BS_td>@modalFlightInfo.FlightInfo.status</BS_td>
+                                                </BS_tr>
+                                                <BS_tr>
+                                                    <BS_th scope="row">Czas odlotu</BS_th> 
+                                                    <BS_td>@modalFlightInfo.FlightInfo.departure.scheduledTime.ToLocalTime()</BS_td>
+                                                </BS_tr>
+                                                <BS_tr>
+                                                    <BS_th scope="row">Terminal</BS_th> 
+                                                    <BS_td>@modalFlightInfo.FlightInfo.departure.terminal</BS_td>
+                                                </BS_tr>
+                                                <BS_tr>
+                                                    <BS_th scope="row">Bramka</BS_th> 
+                                                    <BS_td>@modalFlightInfo.FlightInfo.departure.gate</BS_td>
+                                                </BS_tr>
+                                                <BS_tr>
+                                                    <BS_th scope="row">Pozycja</BS_th> 
+                                                    <BS_td>
+                                                    
+                                                    <a href="https://www.flightradar24.com/data/flights/@modalFlightInfo.FlightInfo.flight.iataNumber.ToLower()" target="_blank">flightradar24.com</a>
+                                                    
+                                                    </BS_td>
+                                                </BS_tr>
+                                            </BS_tbody>
+                                        </BSTable>
+                                    </BSModalBody>
+                                    <BSModalFooter>
+                                        <BSButton Color="Color.Primary" @onclick="@(() => FullWidth.Hide())">Zamknij</BSButton>    
+                                    </BSModalFooter>
+                                </BSModal>
+                        }
+                            }
+                        </ItemTemplate>
+                    </BSDataTable>
+                </BSTabContent>
+            </BSTab>
+@*PRZYLOTY TAB END*@
+        </BSTabList>
     <BSTabSelectedContent/>
 </BSTabGroup>
+
+</BSCol>
+</BSRow>
+</BSContainer>

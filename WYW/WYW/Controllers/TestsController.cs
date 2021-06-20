@@ -23,7 +23,14 @@ namespace WYW.Controllers
         [HttpPost("currentResponse")]
         public async Task<IActionResult> ChangeCurrentApiResponse(FlightInfo[] currentResponse)
         {
-            apiResponseService.RecentResponse = new RecentResponse() { LastResponse = currentResponse, LastResponseDT = DateTime.Now };
+            try
+            {
+                apiResponseService.RecentResponse = new RecentResponse() { LastResponse = currentResponse, LastResponseDT = DateTime.Now };
+            }
+            catch (Exception ex)
+            {
+                return Content(ex.ToString());
+            }
             return StatusCode(200);
         }
 

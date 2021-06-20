@@ -1,15 +1,23 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BlazorStrap;
 using WYW.Areas.Identity;
 using WYW.Data;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Http;
 
 namespace WYW
 {
@@ -39,6 +47,12 @@ namespace WYW
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddBootstrapCss();
+            //services.Configure<CookiePolicyOptions>(options =>
+            //{
+            //    options.CheckConsentNeeded = context => true;
+            //    options.MinimumSameSitePolicy = SameSiteMode.None;
+            //});
+            //services.AddHttpContextAccessor();
 
 #if PROD || DEBUG
             ApiResponseService apiService = new ApiResponseService();
@@ -56,7 +70,6 @@ namespace WYW
             services.AddSingleton<IDateTime>(dateTime);
 
             services.AddScoped<UserTimeZoneService>();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,6 +94,7 @@ namespace WYW
 
             app.UseAuthentication();
             app.UseAuthorization();
+            //app.UseCookiePolicy();
 
             app.UseEndpoints(endpoints =>
             {
