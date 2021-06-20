@@ -36,15 +36,25 @@ namespace WYW.Pages
         private BSModal FullWidth { get; set; }
         private ExtendedFlightInfo modalFlightInfo;
 
+        private string exceptionDetails;
+
         protected override void OnInitialized()
         {
-            flightInfos = ApiService.RecentResponse.LastResponse
+            try
+            {
+                flightInfos = ApiService.RecentResponse.LastResponse
                                                     .Select(fi => new ExtendedFlightInfo(fi))
                                                     .ToList();
-            modalFlightInfo = flightInfos[0];
-            if (timer == null)
+
+                modalFlightInfo = flightInfos.FirstOrDefault();
+                if (timer == null)
+                {
+                    timer = new Timer(async (e) => { await UpdateTimeSpans(); }, null, TimeSpan.Zero, TimeSpan.FromSeconds(60));
+                }
+            }
+            catch (Exception ex)
             {
-                timer = new Timer(async (e) => { await UpdateTimeSpans(); }, null, TimeSpan.Zero, TimeSpan.FromSeconds(60));
+                exceptionDetails = ex.ToString();
             }
         }
 
@@ -67,16 +77,23 @@ namespace WYW.Pages
 
         private async Task UpdateTimeSpans()
         {
-            var now = await TimeZoneService.GetLocalDateTime(DateTimeService.UtcNow());
-
-            foreach (var fi in flightInfos)
+            try
             {
-                UpdateTimeFor(fi, now);
-            }
+                var now = await TimeZoneService.GetLocalDateTime(DateTimeService.UtcNow());
 
-            UpdateTimeFor(chosenFlightInfo, now);
-            
-            await InvokeAsync(StateHasChanged);
+                foreach (var fi in flightInfos)
+                {
+                    UpdateTimeFor(fi, now);
+                }
+
+                UpdateTimeFor(chosenFlightInfo, now);
+
+                await InvokeAsync(StateHasChanged);
+            }
+            catch (Exception ex)
+            {
+                exceptionDetails = ex.ToString();
+            }
         }
 
         private void UpdateTimeFor(ExtendedFlightInfo fi, DateTimeOffset now)
