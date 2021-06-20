@@ -33,13 +33,15 @@ namespace WYW.Pages
         private List<ExtendedFlightInfo> flightInfos;
         private BSDataTable<ExtendedFlightInfo> SortableRef { get; set; }
         private BSTabGroup TabGroup;
+        private BSModal FullWidth { get; set; }
+        private ExtendedFlightInfo modalFlightInfo;
 
         protected override void OnInitialized()
         {
             flightInfos = ApiService.RecentResponse.LastResponse
                                                     .Select(fi => new ExtendedFlightInfo(fi))
                                                     .ToList();
-
+            modalFlightInfo = flightInfos[0];
             if (timer == null)
             {
                 timer = new Timer(async (e) => { await UpdateTimeSpans(); }, null, TimeSpan.Zero, TimeSpan.FromSeconds(60));
@@ -130,6 +132,12 @@ namespace WYW.Pages
         {
             flight.IsOpen = !flight.IsOpen;
             StateHasChanged();
+        }
+
+        private void ExpandFlight2(ExtendedFlightInfo flight)
+        {
+            modalFlightInfo = flight;
+            FullWidth.Show();
         }
     }
 }
