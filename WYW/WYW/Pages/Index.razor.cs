@@ -62,10 +62,11 @@ namespace WYW.Pages
         private void OnFlightChanged(FlightInfo flight)
         {
             var changedFlight = flightInfos.FirstOrDefault(fi => fi.FlightInfo.flight.iataNumber == flight.flight.iataNumber);
+            ExtendedFlightInfo updatedFlight = null;
 
             if (changedFlight != null)
             {
-                ExtendedFlightInfo updatedFlight = new ExtendedFlightInfo(flight);
+                updatedFlight = new ExtendedFlightInfo(flight);
                 if(changedFlight.FlightInfo.status != flight.status)
                     updatedFlight.IsStatusChanged = true;
                 else
@@ -86,6 +87,9 @@ namespace WYW.Pages
                 flightInfos.Remove(changedFlight);
                 flightInfos.Add(updatedFlight);
             }
+
+            if (chosenFlightInfo.FlightInfo.flight.iataNumber == flight.flight.iataNumber)
+                chosenFlightInfo = updatedFlight;
 
             UpdateTimeSpans();
         }
