@@ -35,20 +35,64 @@
                      <BSTable>
                         <BS_tbody>
                             <BS_tr>
-                                <BS_th scope="row">Status</BS_th> 
-                                <BS_td>@chosenFlightInfo.FlightInfo.status</BS_td>
+                                <BS_th scope="row">Status</BS_th>
+                                @if(chosenFlightInfo.IsStatusChanged)
+                                {
+                                    <BSTableRow Color="Color.Warning">
+                                        <BS_td>@chosenFlightInfo.FlightInfo.status</BS_td>
+                                    </BSTableRow>
+                                }
+                                else
+                                {
+                                    <BSTableRow>
+                                        <BS_td>@chosenFlightInfo.FlightInfo.status</BS_td>
+                                    </BSTableRow>
+                                }
                             </BS_tr>
                              <BS_tr>
-                                <BS_th scope="row">Czas odlotu</BS_th> 
-                                    <BS_td>@chosenFlightInfo.FlightInfo.departure.scheduledTime.ToLocalTime()</BS_td>
+                                <BS_th scope="row">Czas odlotu</BS_th>
+                                @if(chosenFlightInfo.IsScheduledTimeChanged)
+                                {
+                                    <BSTableRow Color="Color.Warning">
+                                        <BS_td>@chosenFlightInfo.FlightInfo.departure.scheduledTime.ToLocalTime()</BS_td>
+                                    </BSTableRow>
+                                }
+                                else
+                                {
+                                    <BSTableRow>
+                                        <BS_td>@chosenFlightInfo.FlightInfo.departure.scheduledTime.ToLocalTime()</BS_td>
+                                    </BSTableRow>
+                                }
                              </BS_tr>
                             <BS_tr>
-                                <BS_th scope="row">Terminal</BS_th> 
-                                    <BS_td>@chosenFlightInfo.FlightInfo.departure.terminal</BS_td>
+                                <BS_th scope="row">Terminal</BS_th>
+                                @if(chosenFlightInfo.IsTerminalChanged)
+                                {
+                                    <BSTableRow Color="Color.Warning">
+                                        <BS_td>@chosenFlightInfo.FlightInfo.departure.terminal</BS_td>
+                                    </BSTableRow>
+                                }
+                                else
+                                {
+                                    <BSTableRow>
+                                        <BS_td>@chosenFlightInfo.FlightInfo.departure.terminal</BS_td>
+                                    </BSTableRow>
+                                }
                             </BS_tr>
                              <BS_tr>
-                                <BS_th scope="row">Bramka</BS_th> 
-                                <BS_td>@chosenFlightInfo.FlightInfo.departure.gate</BS_td>
+                                <BS_th scope="row">Bramka</BS_th>
+                                @if(chosenFlightInfo.IsGateChanged)
+                                {
+                                    <BSTableRow Color="Color.Warning">
+                                        <BS_td>@chosenFlightInfo.FlightInfo.departure.gate</BS_td>
+                                    </BSTableRow>
+                                }
+                                else
+                                {
+                                    <BSTableRow>
+                                        <BS_td>@chosenFlightInfo.FlightInfo.departure.gate</BS_td>
+                                    </BSTableRow>
+                                }
                             </BS_tr>
                                <BS_tr>
                                     <BS_th scope="row">Pozycja</BS_th> 
@@ -164,7 +208,7 @@
                             <BS_tr>
                                 
                                 <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataNumber"))" @onclick:preventDefault>NUMER LOTU</a></BS_th>
-                                <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("TimeToArrival"))" @onclick:preventDefault>CZAS DO ODLOTU</a></BS_th>
+                                <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("TimeToArrival"))" @onclick:preventDefault>CZAS DO PRZYLOTU</a></BS_th>
                                 <BS_th scope="col">DODAJ</BS_th>
                             </BS_tr>
                         </HeaderTemplate>
