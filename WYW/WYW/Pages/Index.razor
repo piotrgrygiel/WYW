@@ -12,13 +12,41 @@
         <BSTab>
             <BSTabLabel>Moje Loty</BSTabLabel>
             <BSTabContent>
-                <div class="card m-3">
-                    <h2 class="card-header"> TWÓJ LOT: </h2> 
-                </div>
+                
                 <br>
                 @if (chosenFlightInfo != null)
                 {
-                    <BSTable>
+                    
+                    <div class="card m-1">
+                    <h2 class="card-header"> TWÓJ LOT: @chosenFlightInfo.FlightInfo.flight.iataNumber</h2> 
+                    </div>
+
+                     <BSTable>
+                        <BS_tbody>
+                            <BS_tr>
+                                <BS_th scope="row">Status</BS_th> 
+                                <BS_td>@chosenFlightInfo.FlightInfo.status</BS_td>
+                            </BS_tr>
+                             <BS_tr>
+                                <BS_th scope="row">Czas odlotu</BS_th> 
+                                    <BS_td>@TimeZoneService.GetLocalDateTime(chosenFlightInfo.FlightInfo.departure.scheduledTime)</BS_td>
+                             </BS_tr>
+                            <BS_tr>
+                                <BS_th scope="row">Terminal</BS_th> 
+                                    <BS_td>@chosenFlightInfo.FlightInfo.departure.terminal</BS_td>
+                            </BS_tr>
+                             <BS_tr>
+                                <BS_th scope="row">Bramka</BS_th> 
+                                <BS_td>@chosenFlightInfo.FlightInfo.departure.gate</BS_td>
+                            </BS_tr>
+                               <BS_tr>
+                                    <BS_th scope="row">Pozycja</BS_th> 
+                                    <BS_td><a href="https://www.flightradar24.com/data/flights/@chosenFlightInfo.FlightInfo.flight.iataNumber" target="_blank">flightradar24.com</a></BS_td>
+                                </BS_tr>
+                        </BS_tbody>
+                    </BSTable>
+                    
+                    @*<BSTable>
                         <BS_thead>
                             <BS_tr>
                                 <BS_th scope="col">STATUS LOTU</BS_th>
@@ -35,11 +63,11 @@
                                 <BS_td>@chosenFlightInfo.FlightInfo.departure.gate</BS_td>
                             </BS_tr>
                         </BS_tbody>
-                    </BSTable>
+                    </BSTable>*@
                 }
                 else
                 {
-                    <p>Wybierz lot z zakładki odloty</p>
+                    <p>Zajrzyj do zakladki Odloty lub Przyloty i </p>
                 }
             </BSTabContent>
         </BSTab>
