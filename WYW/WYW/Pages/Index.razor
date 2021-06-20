@@ -40,7 +40,7 @@
                             </BS_tr>
                              <BS_tr>
                                 <BS_th scope="row">Czas odlotu</BS_th> 
-                                    <BS_td>@TimeZoneService.GetLocalDateTime(chosenFlightInfo.FlightInfo.departure.scheduledTime)</BS_td>
+                                    <BS_td>@chosenFlightInfo.FlightInfo.departure.scheduledTime.ToLocalTime()</BS_td>
                              </BS_tr>
                             <BS_tr>
                                 <BS_th scope="row">Terminal</BS_th> 
@@ -127,7 +127,7 @@
                                                 </BS_tr>
                                                 <BS_tr>
                                                     <BS_th scope="row">Czas odlotu</BS_th> 
-                                                    <BS_td>@TimeZoneService.GetLocalDateTime(modalFlightInfo.FlightInfo.departure.scheduledTime)</BS_td>
+                                                    <BS_td>@modalFlightInfo.FlightInfo.departure.scheduledTime.ToLocalTime()</BS_td>
                                                 </BS_tr>
                                                 <BS_tr>
                                                     <BS_th scope="row">Terminal</BS_th> 
@@ -189,7 +189,7 @@
                                                 </BS_tr>
                                                 <BS_tr>
                                                     <BS_th scope="row">Czas odlotu</BS_th> 
-                                                    <BS_td>@TimeZoneService.GetLocalDateTime(modalFlightInfo.FlightInfo.departure.scheduledTime)</BS_td>
+                                                    <BS_td>@modalFlightInfo.FlightInfo.departure.scheduledTime.ToLocalTime()</BS_td>
                                                 </BS_tr>
                                                 <BS_tr>
                                                     <BS_th scope="row">Terminal</BS_th> 

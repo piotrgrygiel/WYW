@@ -70,7 +70,6 @@ namespace WYW
             services.AddSingleton<IDateTime>(dateTime);
 
             services.AddScoped<UserTimeZoneService>();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
