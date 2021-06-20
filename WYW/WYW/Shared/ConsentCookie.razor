@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Http
 
 @inject IHttpContextAccessor Http
+@inject IHttpContextAccessor httpContextAccessor
 @inject IJSRuntime JSRuntime
 @using BlazorStrap;
 @using BlazorStrap.Extensions.BSDataTable;
@@ -9,42 +10,29 @@
 
 @if (showBanner)
 {
-    <div id="cookieConsent" class="alert alert-info alert-dismissible fade show" role="alert">
+    <div id="cookieConsent" class="alert alert-secondary alert-dismissible fade show" role="alert">
        <th scope="col">
-       Please check and Accept our Privacy Policy and Cookie Policy.
+       <p class="font-weight-normal" style="text-align:left;">Sprawdź i zaakceptuj naszą politykę prywatności i politykę "Cookie"</p>
         <BSCollapseItem>
-
                 <BSCard CardType="CardType.Card">
-
                     <BSCard CardType="CardType.Header">
-
-                        <BSCollapseToggle IsLink="true">Privacy Policy</BSCollapseToggle>
-
+                        <BSCollapseToggle IsLink="true">Polityka Prywatności</BSCollapseToggle>
                     </BSCard>
-
                     <BSCollapse>
-
                         <BSCard CardType="CardType.Body">
-
                             <BSCard CardType="CardType.Text">
                                 <Privacy />
                             </BSCard>
-
                         </BSCard>
-
                     </BSCollapse>
-
                 </BSCard>
-
             </BSCollapseItem>
         </th>
         <th scope="col">
             <BSCol SM="auto" SMOffset="1">
-        <BSButton Color="Color.Primary"  data-cookie-string="@cookieString" @onclick="AcceptMessage">Accept</BSButton>          
+        <BSButton Color="Color.Primary"  data-cookie-string="@cookieString" @onclick="AcceptMessage">Akceptuj</BSButton>          
         </BSCol>
-        </th>
-        
-        
+        </th>     
     </div>
     
 }
