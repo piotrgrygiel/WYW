@@ -41,24 +41,22 @@ namespace WYW.Data
         {            
 
                 ////zgłaszamy zaistnienie zmiany
-                foreach(FlightInfo flight in RecentResponse.LastResponse)
+            foreach(FlightInfo flight in RecentResponse.LastResponse)
+            {
+                for(int i = 0; i < PreviousResponse.LastResponse.Length; i++)
                 {
-                    for(int i = 0; i < PreviousResponse.LastResponse.Length; i++)
+                    if(PreviousResponse.LastResponse[i].flight.iataNumber == flight.flight.iataNumber)
                     {
-                        if(PreviousResponse.LastResponse[i].flight.iataNumber == flight.flight.iataNumber)
+                        if(flight.status != PreviousResponse.LastResponse[i].status ||
+                        flight.departure.scheduledTime != PreviousResponse.LastResponse[i].departure.scheduledTime ||
+                        flight.departure.terminal != PreviousResponse.LastResponse[i].departure.terminal ||
+                        flight.departure.gate != PreviousResponse.LastResponse[i].departure.gate)
                         {
-                            if(flight.status != PreviousResponse.LastResponse[i].status ||
-                            flight.departure.scheduledTime != PreviousResponse.LastResponse[i].departure.scheduledTime ||
-                            flight.departure.terminal != PreviousResponse.LastResponse[i].departure.terminal ||
-                            flight.departure.gate != PreviousResponse.LastResponse[i].departure.gate)
-                            {
-                                OnSomeDataChanged(flight);
-                            }
+                            OnSomeDataChanged(flight);
                         }
                     }
                 }
-
-                PreviousResponse = RecentResponse;
+            }
         }
     }
 }
