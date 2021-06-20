@@ -2,14 +2,22 @@
 @using Microsoft.Extensions.Logging
 @using WYW.Data
 @inject IJSRuntime JSRuntime;
+@inject NavigationManager NavManager
 @using BlazorStrap;
 @using BlazorStrap.Extensions.BSDataTable;
+
+<BSContainer>
+<BSRow>
+
+<BSCol SM="12" MD="6" MDOffset="3">
 
 <BS_Table>
     <BS_tbody>
         <BS_tr>
             <BS_td>
-
+                <div img>
+                <BSImage IsRounded="false" Alignment="Alignment.Center" src="./img/lotnisko-poznan-lawica_sm.png" alt="Poznan Ławica" />
+                </div>
             </BS_td>
         </BS_tr>
     </BS_tbody>
@@ -52,33 +60,19 @@
                             </BS_tr>
                                <BS_tr>
                                     <BS_th scope="row">Pozycja</BS_th> 
-                                    <BS_td><a href="https://www.flightradar24.com/data/flights/@chosenFlightInfo.FlightInfo.flight.iataNumber" target="_blank">flightradar24.com</a></BS_td>
+                                    <BS_td>
+
+                                        <a href="https://www.flightradar24.com/data/flights/@chosenFlightInfo.FlightInfo.flight.iataNumber.ToLower()" target="_blank">flightradar24.com</a>
+                                    </BS_td>
                                 </BS_tr>
                         </BS_tbody>
-                    </BSTable>
-                    
-                    @*<BSTable>
-                        <BS_thead>
-                            <BS_tr>
-                                <BS_th scope="col">STATUS LOTU</BS_th>
-                                <BS_th scope="col">CZAS DO ODLOTU</BS_th>
-                                <BS_th scope="col">TERMINAL</BS_th>
-                                <BS_th scope="col">BRAMKA</BS_th>
-                            </BS_tr>
-                        </BS_thead>
-                        <BS_tbody>
-                            <BS_tr>
-                                <BS_td>@chosenFlightInfo.FlightInfo.status</BS_td>
-                                <BS_td>@($"{chosenFlightInfo.TimeToDeparture:h\\:mm}")</BS_td>
-                                <BS_td>@chosenFlightInfo.FlightInfo.departure.terminal</BS_td>
-                                <BS_td>@chosenFlightInfo.FlightInfo.departure.gate</BS_td>
-                            </BS_tr>
-                        </BS_tbody>
-                    </BSTable>*@
+                    </BSTable>                   
                 }
                 else
                 {
-                    <p>Zajrzyj do zakladki Odloty lub Przyloty i </p>
+                    <h3>Witamy na lotnisku Poznań Ławica.</h3><br>
+                    <h4>Dodaj swój lot Korzystając z list dostępnych w zakładkach Odloty lub Przyloty.<br>
+                    Aplikacja poinformuje się o zmianach status lotu</h4>
                 }
             </BSTabContent>
         </BSTab>
@@ -139,7 +133,7 @@
                                                 </BS_tr>
                                                 <BS_tr>
                                                     <BS_th scope="row">Pozycja</BS_th> 
-                                                    <BS_td><a href="https://www.flightradar24.com/data/flights/@modalFlightInfo.FlightInfo.flight.iataNumber" target="_blank">flightradar24.com</a></BS_td>
+                                                    <BS_td><a href="https://www.flightradar24.com/data/flights/@modalFlightInfo.FlightInfo.flight.iataNumber.ToLower()" target="_blank">flightradar24.com</a></BS_td>
                                                 </BS_tr>
                                             </BS_tbody>
                                         </BSTable>
@@ -165,7 +159,7 @@
                                 
                                 <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("iataNumber"))" @onclick:preventDefault>NUMER LOTU</a></BS_th>
                                 <BS_th scope="col"><a href="javascript:void(0)" @onclick="@(() => SortableRef.Sort("TimeToArrival"))" @onclick:preventDefault>CZAS DO ODLOTU</a></BS_th>
-                                <BS_th scope="col">DODAJ</BS_th>
+                                <BS_th scope="col">   </BS_th>
                             </BS_tr>
                         </HeaderTemplate>
                         <ItemTemplate>
@@ -201,7 +195,11 @@
                                                 </BS_tr>
                                                 <BS_tr>
                                                     <BS_th scope="row">Pozycja</BS_th> 
-                                                    <BS_td><a href="https://www.flightradar24.com/data/flights/@modalFlightInfo.FlightInfo.flight.iataNumber" target="_blank">flightradar24.com</a></BS_td>
+                                                    <BS_td>
+                                                    
+                                                    <a href="https://www.flightradar24.com/data/flights/@modalFlightInfo.FlightInfo.flight.iataNumber.ToLower()" target="_blank">flightradar24.com</a>
+                                                    
+                                                    </BS_td>
                                                 </BS_tr>
                                             </BS_tbody>
                                         </BSTable>
@@ -219,3 +217,7 @@
         </BSTabList>
     <BSTabSelectedContent/>
 </BSTabGroup>
+
+</BSCol>
+</BSRow>
+</BSContainer>
