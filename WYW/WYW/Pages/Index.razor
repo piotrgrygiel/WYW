@@ -48,63 +48,52 @@
                      <BSTable>
                         <BS_tbody>
                             <BS_tr>
-                                <BS_th scope="row">Status</BS_th>
                                 @if(chosenFlightInfo.IsStatusChanged)
                                 {
-                                    <BSTableRow Color="Color.Warning">
-                                        <BS_td>@chosenFlightInfo.FlightInfo.status</BS_td>
-                                    </BSTableRow>
+                                    <BSTableCell Color="Color.Warning" scope="row">Status</BSTableCell>
+                                    <BSTableCell Color="Color.Warning">@chosenFlightInfo.FlightInfo.status</BSTableCell>
                                 }
                                 else
                                 {
-                                    <BSTableRow>
-                                        <BS_td>@chosenFlightInfo.FlightInfo.status</BS_td>
-                                    </BSTableRow>
+                                    <BSTableCell scope="row">Status</BSTableCell>
+                                    <BSTableCell>@chosenFlightInfo.FlightInfo.status</BSTableCell>
                                 }
                             </BS_tr>
                              <BS_tr>
-                                <BS_th scope="row">Czas odlotu</BS_th>
                                 @if(chosenFlightInfo.IsScheduledTimeChanged)
                                 {
-                                    <BSTableRow Color="Color.Warning">
-                                        <BS_td>@chosenFlightInfo.FlightInfo.departure.scheduledTime.ToLocalTime()</BS_td>
-                                    </BSTableRow>
+                                    <BSTableCell Color="Color.Warning" scope="row">Czas odlotu</BSTableCell>
+                                    <BSTableCell Color="Color.Warning">@chosenFlightInfo.FlightInfo.departure.scheduledTime.ToLocalTime()</BSTableCell>
                                 }
                                 else
                                 {
-                                    <BSTableRow>
-                                        <BS_td>@chosenFlightInfo.FlightInfo.departure.scheduledTime.ToLocalTime()</BS_td>
-                                    </BSTableRow>
+                                    
+                                    <BSTableCell scope="row">Czas odlotu</BSTableCell>
+                                    <BSTableCell>@chosenFlightInfo.FlightInfo.departure.scheduledTime.ToLocalTime()</BSTableCell>
                                 }
                              </BS_tr>
                             <BS_tr>
-                                <BS_th scope="row">Terminal</BS_th>
                                 @if(chosenFlightInfo.IsTerminalChanged)
                                 {
-                                    <BSTableRow Color="Color.Warning">
-                                        <BS_td>@chosenFlightInfo.FlightInfo.departure.terminal</BS_td>
-                                    </BSTableRow>
+                                    <BSTableCell Color="Color.Warning" scope="row">Terminal</BSTableCell>
+                                    <BSTableCell Color="Color.Warning">@chosenFlightInfo.FlightInfo.departure.terminal</BSTableCell>
                                 }
                                 else
                                 {
-                                    <BSTableRow>
-                                        <BS_td>@chosenFlightInfo.FlightInfo.departure.terminal</BS_td>
-                                    </BSTableRow>
+                                    <BSTableCell scope="row">Terminal</BSTableCell>
+                                    <BSTableCell>@chosenFlightInfo.FlightInfo.departure.terminal</BSTableCell>
                                 }
                             </BS_tr>
                              <BS_tr>
-                                <BS_th scope="row">Bramka</BS_th>
                                 @if(chosenFlightInfo.IsGateChanged)
                                 {
-                                    <BSTableRow Color="Color.Warning">
-                                        <BS_td>@chosenFlightInfo.FlightInfo.departure.gate</BS_td>
-                                    </BSTableRow>
+                                    <BSTableCell Color="Color.Warning" scope="row">Bramka</BSTableCell>
+                                    <BSTableCell Color="Color.Warning">@chosenFlightInfo.FlightInfo.departure.gate</BSTableCell>
                                 }
                                 else
                                 {
-                                    <BSTableRow>
-                                        <BS_td>@chosenFlightInfo.FlightInfo.departure.gate</BS_td>
-                                    </BSTableRow>
+                                    <BSTableCell scope="row">Bramka</BSTableCell>
+                                    <BSTableCell>@chosenFlightInfo.FlightInfo.departure.gate</BSTableCell>
                                 }
                             </BS_tr>
                                <BS_tr>

@@ -7,7 +7,6 @@ using System.Threading;
 using BlazorStrap;
 using System.Threading.Tasks;
 using WYW.Data;
-using Microsoft.AspNetCore.Components.Web;
 using BlazorStrap.Extensions.BSDataTable;
 
 namespace WYW.Pages
@@ -101,15 +100,6 @@ namespace WYW.Pages
             await InvokeAsync(StateHasChanged);
             TabGroup.SelectTabById("flightTab");
         }
-
-        //private void HandleValidSubmit()
-        //{
-        //    Logger.LogInformation("HandleValidSubmit called");
-
-        //    userFilledFlightNumber = true;
-
-        //    chosenFlightInfo = ApiService.RecentResponse.LastResponse.FirstOrDefault(flight => flight.flight.number.Equals(inputfdModel.GetNumber(), StringComparison.InvariantCultureIgnoreCase));
-        //}
 
         private async Task UpdateTimeSpans()
         {
