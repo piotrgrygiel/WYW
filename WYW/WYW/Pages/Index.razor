@@ -193,52 +193,6 @@
                                 </BSModalFooter>
                             </BSModal>
                             }
-
-                                <BS_td>
-                                    @record.iataCode
-                                </BS_td>
-                                
-                                <BS_td>
-                                    @($"{record.TimeToDeparture:h\\:mm}")
-                                </BS_td>
-
-                                <BS_td>
-                                    <BSButton Color="Color.Primary" @onclick="() => GetFlightDetailsIMainTab(record)">+</BSButton>
-                                </BS_td>
-                            
-                                <BSModal @ref="FullWidth" IsFullWidth="true">
-                                    <BSModalHeader OnClick="@(() => FullWidth.Hide())">Szczegóły lotu @modalFlightInfo.FlightInfo.flight.iataNumber</BSModalHeader>
-                                    <BSModalBody>
-                                        <BSTable>
-                                            <BS_tbody>
-                                                <BS_tr>
-                                                    <BS_th scope="row">Status</BS_th> 
-                                                    <BS_td>@modalFlightInfo.FlightInfo.status</BS_td>
-                                                </BS_tr>
-                                                <BS_tr>
-                                                    <BS_th scope="row">Czas odlotu</BS_th> 
-                                                    <BS_td>@modalFlightInfo.FlightInfo.departure.scheduledTime.ToLocalTime()</BS_td>
-                                                </BS_tr>
-                                                <BS_tr>
-                                                    <BS_th scope="row">Terminal</BS_th> 
-                                                    <BS_td>@modalFlightInfo.FlightInfo.departure.terminal</BS_td>
-                                                </BS_tr>
-                                                <BS_tr>
-                                                    <BS_th scope="row">Bramka</BS_th> 
-                                                    <BS_td>@modalFlightInfo.FlightInfo.departure.gate</BS_td>
-                                                </BS_tr>
-                                                <BS_tr>
-                                                    <BS_th scope="row">Pozycja</BS_th> 
-                                                    <BS_td><a href="https://www.flightradar24.com/data/flights/@modalFlightInfo.FlightInfo.flight.iataNumber.ToLower()" target="_blank">flightradar24.com</a></BS_td>
-                                                </BS_tr>
-                                            </BS_tbody>
-                                        </BSTable>
-                                    </BSModalBody>
-                                    <BSModalFooter>
-                                        <BSButton Color="Color.Primary" @onclick="@(() => FullWidth.Hide())">Zamknij</BSButton>    
-                                    </BSModalFooter>
-                                </BSModal>
-
                             }
                         </ItemTemplate>
                     </BSDataTable>
