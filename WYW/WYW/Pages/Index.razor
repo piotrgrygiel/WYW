@@ -5,11 +5,11 @@
 @using BlazorStrap;
 @using BlazorStrap.Extensions.BSDataTable;
 
-<BSTabGroup ShowEvent="@Show" HiddenEvent="@Hidden" HideEvent="@Hide" ShownEvent="@Shown">
+<BSTabGroup @ref="TabGroup" ShowEvent="@Show" HiddenEvent="@Hidden" HideEvent="@Hide" ShownEvent="@Shown">
     <BSTabList>
 
 @*MOJE LOTY TAB START*@
-        <BSTab>
+        <BSTab Id="flightTab">
             <BSTabLabel>Moje Loty</BSTabLabel>
             <BSTabContent>
                 <div class="card m-3">
@@ -46,7 +46,7 @@
 @*MOJE LOTY TAB END*@
 
 @*ODLOTY TAB START*@
-            <BSTab>
+            <BSTab Id="departureTab">
                 <BSTabLabel>Odloty</BSTabLabel>
                 <BSTabContent>
                     <BSDataTable Items="flightInfos" Context="record" IsResponsive="true" IsStriped="true" @ref="SortableRef">
@@ -122,7 +122,7 @@
 @*ODLOTY TAB END*@
 
 @*PRZYLOTY TAB START*@
-        <BSTab>
+        <BSTab Id="arrivalTab">
             <BSTabLabel>Przyloty</BSTabLabel>
                 <BSTabContent>
                     <BSDataTable Items="flightInfos" Context="record" IsResponsive="true" IsStriped="true" @ref="SortableRef">
