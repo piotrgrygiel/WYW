@@ -8,10 +8,12 @@
 
 @if (!ConsentGiven)
 {
-<div id="cookieConsent" class="alert alert-secondary alert-dismissible fade show" role="alert">
-       <th scope="col">
-       <p class="font-weight-normal" style="text-align:center;">Sprawdź i zaakceptuj naszą politykę prywatności i politykę "Cookie"</p>
-       <a class="brn btn-outline-secondary" href="/cookie/consent">Accept</a>
+<BSContainer>
+    <BSRow>
+        <BSCol SM="12" MD="6" MDOffset="3">
+<div id="cookieConsent" class="alert alert-secondary alert-dismissible fade show" role="alert" >
+       <p class="font-weight-normal" style="text-align:center;">Polityka prywatności i polityka "Cookie"</p>
+       <a class="btn btn-outline-secondary" style="text-align:center;" href="/cookie/consent">Akceptuj</a>
         <BSCollapseItem>
                 <BSCard CardType="CardType.Card">
                     <BSCard CardType="CardType.Header">
@@ -26,13 +28,17 @@
                     </BSCollapse>
                 </BSCard>
             </BSCollapseItem>
-        </th>
+       
+</div>
+        </BSCol>
+       </BSRow>
+</BSContainer>
         @*<th scope="col">
             <BSCol SM="auto" SMOffset="1">
         <BSButton Color="Color.Primary"  data-cookie-string="@cookieString" @onclick="AcceptMessage">Akceptuj</BSButton>          
         </BSCol>
         </th>*@
-    </div>
+    
 }
     
     
