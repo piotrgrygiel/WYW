@@ -8,37 +8,23 @@
 
 @if (!ConsentGiven)
 {
+    
 <BSContainer>
-    <BSRow>
-        <BSCol SM="12" MD="6" MDOffset="3">
-<div id="cookieConsent" class="alert alert-secondary alert-dismissible fade show" role="alert" >
-       <p class="font-weight-normal" style="text-align:center;">Polityka prywatności i polityka "Cookie"</p>
-       <a class="btn btn-outline-secondary" style="text-align:center;" href="/cookie/consent">Akceptuj</a>
-        <BSCollapseItem>
-                <BSCard CardType="CardType.Card">
-                    <BSCard CardType="CardType.Header">
-                        <BSCollapseToggle IsLink="true">Polityka Prywatności</BSCollapseToggle>
-                    </BSCard>
-                    <BSCollapse>
-                        <BSCard CardType="CardType.Body">
-                            <BSCard CardType="CardType.Text">
-                                <Privacy />
-                            </BSCard>
-                        </BSCard>
-                    </BSCollapse>
-                </BSCard>
-            </BSCollapseItem>
-       
-</div>
-        </BSCol>
+       <BSRow>
+           <BSCol SM="12" MD="6" MDOffset="3">
+               <BSButton IsOutline="true" Color="Color.Primary" @onclick="@(() => SizeLarge.Show())">Polityka Prywatności i Cookie</BSButton>
+                    <BSModal @ref="SizeLarge" Size="Size.Large">
+                        <BSModalHeader OnClick="@(() => SizeLarge.Hide())">Polityka Prywatności</BSModalHeader>
+                        <BSModalBody><Privacy /></BSModalBody>
+                    <BSModalFooter>
+                        <a class="btn btn-outline-secondary" style="text-align:center;" href="/cookie/consent">Akceptuj</a>
+                        <BSButton Color="Color.Primary" @onclick="@(() => SizeLarge.Hide())">Zamknij</BSButton>
+                    </BSModalFooter>
+                    </BSModal>
+                    <a class="btn btn-outline-secondary" style="text-align:center;" href="/cookie/consent">Akceptuj</a>
+            </BSCol>
        </BSRow>
 </BSContainer>
-        @*<th scope="col">
-            <BSCol SM="auto" SMOffset="1">
-        <BSButton Color="Color.Primary"  data-cookie-string="@cookieString" @onclick="AcceptMessage">Akceptuj</BSButton>          
-        </BSCol>
-        </th>*@
-    
 }
     
     
@@ -46,5 +32,6 @@
 @code {
     [CascadingParameter]
     public bool ConsentGiven { get; set;}
-    
+    BSModal FullWidth { get; set; }
+     BSModal SizeLarge { get; set; }
 }
