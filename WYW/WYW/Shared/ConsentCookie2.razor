@@ -6,12 +6,12 @@
 @using BlazorStrap;
 @using BlazorStrap.Extensions.BSDataTable;
 
-
-@if (showBanner)
+@if (!ConsentGiven)
 {
-    <div id="cookieConsent" class="alert alert-secondary alert-dismissible fade show" role="alert">
+<div id="cookieConsent" class="alert alert-secondary alert-dismissible fade show" role="alert">
        <th scope="col">
-       <p class="font-weight-normal" style="text-align:left;">Sprawdź i zaakceptuj naszą politykę prywatności i politykę "Cookie"</p>
+       <p class="font-weight-normal" style="text-align:center;">Sprawdź i zaakceptuj naszą politykę prywatności i politykę "Cookie"</p>
+       <a class="brn btn-outline-secondary" href="/cookie/consent">Accept</a>
         <BSCollapseItem>
                 <BSCard CardType="CardType.Card">
                     <BSCard CardType="CardType.Header">
@@ -27,31 +27,18 @@
                 </BSCard>
             </BSCollapseItem>
         </th>
-        <th scope="col">
+        @*<th scope="col">
             <BSCol SM="auto" SMOffset="1">
         <BSButton Color="Color.Primary"  data-cookie-string="@cookieString" @onclick="AcceptMessage">Akceptuj</BSButton>          
         </BSCol>
-        </th>     
+        </th>*@
     </div>
-    
 }
-@code {
-    ITrackingConsentFeature consentFeature;
-    bool showBanner;
-    string cookieString;
-
-    protected override void OnInitialized()
-    {
-        consentFeature = Http.HttpContext.Features.Get<ITrackingConsentFeature>();
-        showBanner = !consentFeature?.CanTrack ?? false;
-        cookieString = consentFeature?.CreateConsentCookie();
-    }
-
-    private void AcceptMessage()
-    {
-        // JsInterop call to store the consent cookies.
-        JSRuntime.InvokeVoidAsync("CookieFunction.acceptMessage", cookieString);
-        showBanner = false;
     
-    }
+    
+
+@code {
+    [CascadingParameter]
+    public bool ConsentGiven { get; set;}
+    
 }

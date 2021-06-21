@@ -18,8 +18,9 @@
     <script src="_content/BlazorStrap/blazorStrap.js"></script>
 </head>
 <body>
-    <component type="typeof(App)" render-mode="Server" />
-
+    <app>
+    <component param-ConsentGiven="@HttpContext.Features.Get<Microsoft.AspNetCore.Http.Features.ITrackingConsentFeature>().HasConsent" type="typeof(App)" render-mode="Server" />
+    </app>
     <div id="blazor-error-ui">
         <environment include="Staging,Production">
             An error has occurred. This application may no longer respond until reloaded.
@@ -31,16 +32,17 @@
         <a class="dismiss">🗙</a>
     </div>
 
-<footer>
-     @*<div>&copy; 2021 - WebApp   <a href="Privacy">Polityka Prywatności</a></div>*@
-    </footer>
-    @*<script>
+@*<footer>
+    <div>&copy; 2021 - WebApp   <a href="Privacy">Polityka Prywatności</a></div>
+    </footer>*@
+    <script>
         window.CookieFunction = {
             acceptMessage: function (cookieString) {
                 document.cookie = cookieString;
             }
         };    
-    </script>*@
+    </script>
+
 
     <script src="_framework/blazor.server.js"></script>
     <script src="~/UserTime.js"></script>
