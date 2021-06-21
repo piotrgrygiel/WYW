@@ -47,12 +47,12 @@ namespace WYW
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddBootstrapCss();
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-            services.AddHttpContextAccessor();
+            //services.Configure<CookiePolicyOptions>(options =>
+            //{
+            //    options.CheckConsentNeeded = context => true;
+            //    options.MinimumSameSitePolicy = SameSiteMode.None;
+            //});
+            //services.AddHttpContextAccessor();
 
 #if PROD || DEBUG
             ApiResponseService apiService = new ApiResponseService();
@@ -70,7 +70,6 @@ namespace WYW
             services.AddSingleton<IDateTime>(dateTime);
 
             services.AddScoped<UserTimeZoneService>();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -95,7 +94,7 @@ namespace WYW
 
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseCookiePolicy();
+            //app.UseCookiePolicy();
 
             app.UseEndpoints(endpoints =>
             {

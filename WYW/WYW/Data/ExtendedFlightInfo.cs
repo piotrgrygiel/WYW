@@ -18,10 +18,28 @@ namespace WYW.Data
             get => FlightInfo.arrival.iataCode;
             set{}
         }
+        public bool IsStatusChanged { get; set; }
+        public bool IsScheduledTimeChanged { get; set; }
+        public bool IsTerminalChanged { get; set; }
+        public bool IsGateChanged { get; set; }
 
         public ExtendedFlightInfo(FlightInfo flightInfo)
         {
             FlightInfo = flightInfo;
+        }
+
+        public ExtendedFlightInfo(ExtendedFlightInfo flightInfo)
+        {
+            FlightInfo = flightInfo.FlightInfo;
+            TimeToDeparture = flightInfo.TimeToDeparture;
+            TimeToArrival = flightInfo.TimeToArrival;
+            IsOpen = flightInfo.IsOpen;
+            iataNumber = flightInfo.iataNumber;
+            iataCode = flightInfo.iataCode;
+            IsStatusChanged = flightInfo.IsStatusChanged;
+            IsScheduledTimeChanged = flightInfo.IsScheduledTimeChanged;
+            IsTerminalChanged = flightInfo.IsTerminalChanged;
+            IsGateChanged = flightInfo.IsGateChanged;
         }
     }
 }
