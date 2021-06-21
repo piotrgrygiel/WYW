@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace WYW.Controllers
 {
@@ -32,7 +33,7 @@ namespace WYW.Controllers
         public async Task<ActionResult> SetConsent()
         {
             ITrackingConsentFeature consent = HttpContext.Features.Get<ITrackingConsentFeature>();
-            if(!consent.Cantrack)
+            if(!consent.CanTrack)
             {
                 consent.GrantConsent();
             }
