@@ -1,41 +1,44 @@
 ﻿<AuthorizeView>
     <Authorized>
-        
-        <BS_table>
-            <div align="left">
-            <BS_tr>
-                <BS_td>
-                    <a href="/">Powrót do Loty</a>
-                </BS_td>
-                <BS_td>
-                    <a href="Identity/Account/Manage">Hello, @context.User.Identity.Name!</a>
-                </BS_td>
-                <BS_td>
-                        <form method="post" action="Identity/Account/LogOut">
-                            <button type="submit" class="nav-link btn btn-link">Wyloguj</button>
-                        </form>
-                </BS_td>
-            </BS_tr>
-            </div>
-        </BS_table>
-        
+    
+<BSContainer>
+    <BSRow>
+        <BSCol SM="12" MD="6" MDOffset="3">        
+            <BS_table style="width:100%">
+                    <BS_tr>
+                        <BS_td style="text-align:right">
+                            <a href="Identity/Account/Manage">Hello, @context.User.Identity.Name!</a>
+                        </BS_td>
+                        <BS_td style="text-align:right">
+                            <form method="post" action="Identity/Account/LogOut">
+                                    <button type="submit" class="nav-link btn btn-link">Wyloguj</button>                           
+                            </form>
+                        </BS_td>
+                    </BS_tr>
+            </BS_table>
+        </BSCol>
+    </BSRow>
+</BSContainer>
+    
     </Authorized>
+
     <NotAuthorized>
-        
-            <BS_table>
-                <div align="left">
+
+<BSContainer> 
+    <BSRow>
+        <BSCol SM="12" MD="6" MDOffset="3">    
+            <BS_table style="width:100%">
                 <BS_tr>
-                    <BS_td>
-                        <a href="/">Powrót do Loty</a>
-                    </BS_td>
-                    <BS_td>
+                    <BS_td style="text-align:right">
                         <a href="Identity/Account/Register">Zarejestruj</a>
                     </BS_td>
-                    <BS_td>
-                        <a href="Identity/Account/Login">Zaloguj</a>
+                    <BS_td style="text-align:right">
+                        <a href="Identity/Account/Login">Zaloguj</a>    
                     </BS_td>
                 </BS_tr>
-                </div>
             </BS_table>
+        </BSCol>
+    </BSRow>
+</BSContainer>   
     </NotAuthorized>
 </AuthorizeView>

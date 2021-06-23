@@ -1,0 +1,37 @@
+@using Microsoft.AspNetCore.Http.Features
+@using Microsoft.AspNetCore.Http
+
+@inject IHttpContextAccessor Http
+@inject IJSRuntime JSRuntime
+@using BlazorStrap;
+@using BlazorStrap.Extensions.BSDataTable;
+
+@if (!ConsentGiven)
+{
+    
+<BSContainer>
+       <BSRow>
+           <BSCol SM="12" MD="6" MDOffset="3">
+               <BSButton IsOutline="true" Color="Color.Primary" @onclick="@(() => SizeLarge.Show())">Polityka Prywatności i Cookie</BSButton>
+                    <BSModal @ref="SizeLarge" Size="Size.Large">
+                        <BSModalHeader OnClick="@(() => SizeLarge.Hide())">Polityka Prywatności</BSModalHeader>
+                        <BSModalBody><Privacy /></BSModalBody>
+                    <BSModalFooter>
+                        <a class="btn btn-outline-secondary" style="text-align:center;" href="/cookie/consent">Akceptuj</a>
+                        <BSButton Color="Color.Primary" @onclick="@(() => SizeLarge.Hide())">Zamknij</BSButton>
+                    </BSModalFooter>
+                    </BSModal>
+                    <a class="btn btn-outline-secondary" style="text-align:center;" href="/cookie/consent">Akceptuj</a>
+            </BSCol>
+       </BSRow>
+</BSContainer>
+}
+    
+    
+
+@code {
+    [CascadingParameter]
+    public bool ConsentGiven { get; set;}
+    BSModal FullWidth { get; set; }
+     BSModal SizeLarge { get; set; }
+}
