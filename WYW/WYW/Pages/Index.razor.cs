@@ -8,6 +8,12 @@ using BlazorStrap;
 using System.Threading.Tasks;
 using WYW.Data;
 using BlazorStrap.Extensions.BSDataTable;
+using Microsoft.JSInterop;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.EntityFrameworkCore;
+using WebPush;
+using System.Text.Json;
 
 namespace WYW.Pages
 {
@@ -25,8 +31,16 @@ namespace WYW.Pages
         [Inject]
         private UserTimeZoneService TimeZoneService { get; set; }
 
+        [Inject]
+        public IJSRuntime JSRuntime { get; set; }
+
+        [Inject]
+        private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+        [Inject]
+        private WywDbContext DbContext { get; set; }
+
         private ExtendedFlightInfo chosenFlightInfo = null;
-        private bool userFilledFlightNumber = false;
         private InputModel inputfdModel = new InputModel();
         private Timer timer = null;
         private List<ExtendedFlightInfo> flightInfos;
@@ -36,6 +50,8 @@ namespace WYW.Pages
         private ExtendedFlightInfo modalFlightInfo;
 
         private string exceptionDetails;
+
+        private bool isSubscribing = false;
 
         protected override void OnInitialized()
         {
@@ -58,6 +74,70 @@ namespace WYW.Pages
             }
         }
 
+        private async Task Subscribe()
+        {
+            var subscription = await JSRuntime.InvokeAsync<NotificationSubscription>("blazorPushNotifications.requestSubscription");
+            if (subscription != null)
+            {
+                await Subscribe(subscription);
+            }
+        }
+
+        private async Task<NotificationSubscription> Subscribe(NotificationSubscription subscription)
+        {
+            // We're storing at most one subscription per user, so delete old ones.
+            // Alternatively, you could let the user register multiple subscriptions from different browsers/devices.
+            var userId = GetUserId();
+            var oldSubscriptions = DbContext.NotificationSubscriptions.Where(e => e.UserId == userId);
+            DbContext.NotificationSubscriptions.RemoveRange(oldSubscriptions);
+
+            // Store new subscription
+            subscription.UserId = userId;
+            DbContext.NotificationSubscriptions.Attach(subscription);
+
+            await DbContext.SaveChangesAsync();
+            return subscription;
+        }
+
+        private string GetUserId()
+        {
+            var user = AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User;
+            return user.FindFirstValue(ClaimTypes.NameIdentifier);
+        }
+
+        private async Task SendPushMsg(string pushMsgText)
+        {
+            var subscription = await DbContext.NotificationSubscriptions.Where(e => e.UserId == GetUserId()).SingleOrDefaultAsync();
+            if (subscription != null)
+            {
+                _ = SendNotificationAsync(subscription, pushMsgText);
+            }
+        }
+
+        private async Task SendNotificationAsync(NotificationSubscription subscription, string message)
+        {
+            // For a real application, generate your own
+            var publicKey = "BLC8GOevpcpjQiLkO7JmVClQjycvTCYWm6Cq_a7wJZlstGTVZvwGFFHMYfXt6Njyvgx_GlXJeo5cSiZ1y4JOx1o";
+            var privateKey = "OrubzSz3yWACscZXjFQrrtDwCKg-TGFuWhluQ2wLXDo";
+
+            var pushSubscription = new PushSubscription(subscription.Url, subscription.P256dh, subscription.Auth);
+            var vapidDetails = new VapidDetails("mailto:<someone@example.com>", publicKey, privateKey);
+            var webPushClient = new WebPushClient();
+            try
+            {
+                var payload = JsonSerializer.Serialize(new
+                {
+                    message,
+                    url = $"/",
+                });
+                await webPushClient.SendNotificationAsync(pushSubscription, payload, vapidDetails);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("Error sending push notification: " + ex.Message);
+            }
+        }
+
         private void OnFlightChanged(FlightInfo flight)
         {
             var changedFlight = flightInfos.FirstOrDefault(fi => fi.FlightInfo.flight.iataNumber == flight.flight.iataNumber);
@@ -65,21 +145,35 @@ namespace WYW.Pages
 
             if (changedFlight != null)
             {
-                updatedFlight = new ExtendedFlightInfo(flight);
                 if(changedFlight.FlightInfo.status != flight.status)
+                {
+
                     updatedFlight.IsStatusChanged = true;
+                }
                 else
                     updatedFlight.IsStatusChanged = false;
+
                 if(changedFlight.FlightInfo.departure.scheduledTime != flight.departure.scheduledTime)
+                {
+
                     updatedFlight.IsScheduledTimeChanged = true;
+                }
                 else
                     updatedFlight.IsScheduledTimeChanged = false;
+
                 if(changedFlight.FlightInfo.departure.terminal != flight.departure.terminal)
+                {
+
                     updatedFlight.IsTerminalChanged = true;
+                }
                 else
                     updatedFlight.IsTerminalChanged = false;
+
                 if(changedFlight.FlightInfo.departure.gate != flight.departure.gate)
+                {
+
                     updatedFlight.IsGateChanged = true;
+                }
                 else
                     updatedFlight.IsGateChanged = false;
 

@@ -1,7 +1,6 @@
 ﻿@page "/"
 @using Microsoft.Extensions.Logging
 @using WYW.Data
-@inject IJSRuntime JSRuntime;
 @inject NavigationManager NavManager
 @using BlazorStrap;
 @using BlazorStrap.Extensions.BSDataTable;
@@ -36,19 +35,19 @@
         <BSTab Id="flightTab">
             <BSTabLabel>Moje Loty</BSTabLabel>
             <BSTabContent>
-                
+
                 <br>
                 @if (chosenFlightInfo != null)
                 {
-                    
+
                     <div class="card m-1">
-                    <h2 class="card-header"> TWÓJ LOT: @chosenFlightInfo.FlightInfo.flight.iataNumber</h2> 
+                        <h2 class="card-header"> TWÓJ LOT: @chosenFlightInfo.FlightInfo.flight.iataNumber</h2>
                     </div>
 
-                     <BSTable>
+                    <BSTable>
                         <BS_tbody>
                             <BS_tr>
-                                @if(chosenFlightInfo.IsStatusChanged)
+                                @if (chosenFlightInfo.IsStatusChanged)
                                 {
                                     <BSTableCell Color="Color.Warning" scope="row">Status</BSTableCell>
                                     <BSTableCell Color="Color.Warning">@chosenFlightInfo.FlightInfo.status</BSTableCell>
@@ -59,21 +58,25 @@
                                     <BSTableCell>@chosenFlightInfo.FlightInfo.status</BSTableCell>
                                 }
                             </BS_tr>
-                             <BS_tr>
-                                @if(chosenFlightInfo.IsScheduledTimeChanged)
+                            <BS_tr>
+                                @if (chosenFlightInfo.IsScheduledTimeChanged)
                                 {
                                     <BSTableCell Color="Color.Warning" scope="row">Czas odlotu</BSTableCell>
                                     <BSTableCell Color="Color.Warning">@chosenFlightInfo.FlightInfo.departure.scheduledTime.ToLocalTime()</BSTableCell>
                                 }
                                 else
                                 {
-                                    
+
                                     <BSTableCell scope="row">Czas odlotu</BSTableCell>
                                     <BSTableCell>@chosenFlightInfo.FlightInfo.departure.scheduledTime.ToLocalTime()</BSTableCell>
                                 }
-                             </BS_tr>
+                            </BS_tr>
+                            <BSTableCell scope="row">Czas do odlotu</BSTableCell>
+                            <BSTableCell>@chosenFlightInfo.TimeToDeparture</BSTableCell>
                             <BS_tr>
-                                @if(chosenFlightInfo.IsTerminalChanged)
+                            </BS_tr>
+                            <BS_tr>
+                                @if (chosenFlightInfo.IsTerminalChanged)
                                 {
                                     <BSTableCell Color="Color.Warning" scope="row">Terminal</BSTableCell>
                                     <BSTableCell Color="Color.Warning">@chosenFlightInfo.FlightInfo.departure.terminal</BSTableCell>
@@ -84,8 +87,8 @@
                                     <BSTableCell>@chosenFlightInfo.FlightInfo.departure.terminal</BSTableCell>
                                 }
                             </BS_tr>
-                             <BS_tr>
-                                @if(chosenFlightInfo.IsGateChanged)
+                            <BS_tr>
+                                @if (chosenFlightInfo.IsGateChanged)
                                 {
                                     <BSTableCell Color="Color.Warning" scope="row">Bramka</BSTableCell>
                                     <BSTableCell Color="Color.Warning">@chosenFlightInfo.FlightInfo.departure.gate</BSTableCell>
@@ -96,22 +99,39 @@
                                     <BSTableCell>@chosenFlightInfo.FlightInfo.departure.gate</BSTableCell>
                                 }
                             </BS_tr>
-                               <BS_tr>
-                                    <BS_th scope="row">Pozycja</BS_th> 
-                                    <BS_td>
+                            <BS_tr>
+                                <BS_th scope="row">Pozycja</BS_th>
+                                <BS_td>
 
-                                        <a href="https://www.flightradar24.com/data/flights/@chosenFlightInfo.FlightInfo.flight.iataNumber.ToLower()" target="_blank">flightradar24.com</a>
-                                    </BS_td>
-                                </BS_tr>
+                                    <a href="https://www.flightradar24.com/data/flights/@chosenFlightInfo.FlightInfo.flight.iataNumber.ToLower()" target="_blank">flightradar24.com</a>
+                                </BS_td>
+                            </BS_tr>
                         </BS_tbody>
-                    </BSTable>                   
+                    </BSTable>
+
+                    <AuthorizeView>
+                        <Authorized>
+                            <div>
+                                @if (isSubscribing)
+                                {
+                                    <BSLabel>Subskrybujesz ten lot, dostaniesz notyfikację jeśli jego status się zmieni</BSLabel>
+                                }
+                                else
+                                {
+                                    <BSButton @onclick=@Subscribe>Subskrybuj ten lot</BSButton>
+                                }
+                            </div>
+                        </Authorized>
+                    </AuthorizeView>
                 }
                 else
                 {
                     <div class="content px-4">
-                    <h3>Witamy na lotnisku Poznań Ławica.</h3><br>
-                    <h4>Dodaj swój lot Korzystając z list dostępnych w zakładkach Odloty lub Przyloty.<br>
-                    Aplikacja poinformuje Cię o zmianach statusu lotu</h4>
+                        <h3>Witamy na lotnisku Poznań Ławica.</h3><br>
+                        <h4>
+                            Dodaj swój lot Korzystając z list dostępnych w zakładkach Odloty lub Przyloty.<br>
+                            Aplikacja poinformuje Cię o zmianach statusu lotu
+                        </h4>
                     </div>
                 }
             </BSTabContent>
