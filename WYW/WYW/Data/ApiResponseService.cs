@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -48,18 +49,22 @@ namespace WYW.Data
                     ////zgłaszamy zaistnienie zmiany
                     foreach(FlightInfo flight in RecentResponse.LastResponse)
                     {
-                        for(int i = 0; i < PreviousResponse.LastResponse.Length; i++)
+                        var previousFlight = PreviousResponse.LastResponse.FirstOrDefault(prFl => prFl.flight.iataNumber == flight.flight.iataNumber);
+
+                        if(previousFlight != null)
                         {
-                            if(PreviousResponse.LastResponse[i].flight.iataNumber == flight.flight.iataNumber)
+                            if(flight.status != previousFlight.status ||
+                            flight.departure.scheduledTime != previousFlight.departure.scheduledTime ||
+                            flight.departure.terminal != previousFlight.departure.terminal ||
+                            flight.departure.gate != previousFlight.departure.gate)
                             {
-                                if(flight.status != PreviousResponse.LastResponse[i].status ||
-                                flight.departure.scheduledTime != PreviousResponse.LastResponse[i].departure.scheduledTime ||
-                                flight.departure.terminal != PreviousResponse.LastResponse[i].departure.terminal ||
-                                flight.departure.gate != PreviousResponse.LastResponse[i].departure.gate)
-                                {
-                                    OnSomeDataChanged(flight);
-                                }
+                                OnSomeDataChanged(flight);
                             }
+                        }
+                        else
+                        {
+                            //zgłaszamy zmianę - nowy lot na liście
+                            OnSomeDataChanged(flight);
                         }
                     }
                     

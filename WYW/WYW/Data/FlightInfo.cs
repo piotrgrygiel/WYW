@@ -34,11 +34,11 @@ namespace WYW.Data
         public object delay { get; set; }
         public object estimatedRunway { get; set; }
         public object estimatedTime { get; set; }
-        public object gate { get; set; }
+        public string gate { get; set; }
         public string iataCode { get; set; }
         public string icaoCode { get; set; }
         public DateTime scheduledTime { get; set; }
-        public object terminal { get; set; }
+        public string terminal { get; set; }
     }
 
     public class Departure
@@ -49,11 +49,11 @@ namespace WYW.Data
         public string delay { get; set; }
         public DateTime? estimatedRunway { get; set; }
         public object estimatedTime { get; set; }
-        public object gate { get; set; }
+        public string gate { get; set; }
         public string iataCode { get; set; }
         public string icaoCode { get; set; }
         public DateTime scheduledTime { get; set; }
-        public object terminal { get; set; }
+        public string terminal { get; set; }
     }
 
     public class Flight

@@ -16,10 +16,12 @@
     <link href="css/site.css" rel="stylesheet" />
     <link href="WYW.styles.css" rel="stylesheet" />
     <script src="_content/BlazorStrap/blazorStrap.js"></script>
+    <link rel="icon" href="img/wyw_icon.png" />
+    <link rel="manifest" href="manifest.json" />
 </head>
 <body>
     <app>
-    <component param-ConsentGiven="@HttpContext.Features.Get<Microsoft.AspNetCore.Http.Features.ITrackingConsentFeature>().HasConsent" type="typeof(App)" render-mode="Server" />
+        <component param-ConsentGiven="@HttpContext.Features.Get<Microsoft.AspNetCore.Http.Features.ITrackingConsentFeature>().HasConsent" type="typeof(App)" render-mode="Server" />
     </app>
     <div id="blazor-error-ui">
         <environment include="Staging,Production">
@@ -32,20 +34,22 @@
         <a class="dismiss">🗙</a>
     </div>
 
-@*<footer>
-    <div>&copy; 2021 - WebApp   <a href="Privacy">Polityka Prywatności</a></div>
-    </footer>*@
+    @*<footer>
+        <div>&copy; 2021 - WebApp   <a href="Privacy">Polityka Prywatności</a></div>
+        </footer>*@
     <script>
         window.CookieFunction = {
             acceptMessage: function (cookieString) {
                 document.cookie = cookieString;
             }
-        };    
+        };
     </script>
 
 
     <script src="_framework/blazor.server.js"></script>
     <script src="~/UserTime.js"></script>
     <script src="_content/BlazorStrap/blazorStrap.js"></script>
+    <script src="pushNotifications.js"></script>
+    <script>navigator.serviceWorker.register('service-worker.js');</script>
 </body>
 </html>
