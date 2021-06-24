@@ -9,5 +9,7 @@ namespace WYW.Data
             : base(options)
         {
         }
+
+        public DbSet<NotificationSubscription> NotificationSubscriptions { get; set; }
     }
 }

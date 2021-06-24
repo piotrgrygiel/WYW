@@ -26,5 +26,6 @@
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
     <PackageReference Include="BlazorStrap" Version="1.5.101-preview-5" />
     <PackageReference Include="BlazorStrap.Extensions.BSDataTable" Version="1.5.0" />
+    <PackageReference Include="WebPush" Version="1.0.11" />
   </ItemGroup>
 </Project>

@@ -107,6 +107,7 @@ namespace WYW
             using (var serviceScope = serviceScopeFactory.CreateScope())
             {
                 var dbContext = serviceScope.ServiceProvider.GetService<WywDbContext>();
+                //dbContext.Database.EnsureDeleted();
                 dbContext.Database.EnsureCreated();
             }
         }
