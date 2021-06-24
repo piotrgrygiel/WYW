@@ -42,6 +42,22 @@
 
                     <div class="card m-1">
                         <h2 class="card-header"> TWÓJ LOT: @chosenFlightInfo.FlightInfo.flight.iataNumber</h2>
+
+                    <AuthorizeView>
+                        <Authorized>
+                            <div>
+                                @if (isSubscribing)
+                                {
+                                    <BSLabel>Subskrybujesz ten lot, dostaniesz notyfikację jeśli jego status się zmieni</BSLabel>
+                                }
+                                else
+                                {
+                                    <BSButton @onclick=@Subscribe>/+\</BSButton>
+                                }
+                            </div>
+                        </Authorized>
+                    </AuthorizeView>
+
                     </div>
 
                     <BSTable>
@@ -109,20 +125,7 @@
                         </BS_tbody>
                     </BSTable>
 
-                    <AuthorizeView>
-                        <Authorized>
-                            <div>
-                                @if (isSubscribing)
-                                {
-                                    <BSLabel>Subskrybujesz ten lot, dostaniesz notyfikację jeśli jego status się zmieni</BSLabel>
-                                }
-                                else
-                                {
-                                    <BSButton @onclick=@Subscribe>Subskrybuj ten lot</BSButton>
-                                }
-                            </div>
-                        </Authorized>
-                    </AuthorizeView>
+
                 }
                 else
                 {
